@@ -1,0 +1,8 @@
+{
+  "appId": "cn.qujsh",
+  "mac": {
+    "category": "public.app-category.utilities",
+    "target": "dmg",
+    "arch": ["universal"]
+  }
+}

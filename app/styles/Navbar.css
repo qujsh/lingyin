@@ -1,0 +1,4 @@
+#main-navbar header {
+  width: 100%; /* 确保 header 占据全宽 */
+  max-width: none; /* 移除  Navbar max-width 限制 */
+}
