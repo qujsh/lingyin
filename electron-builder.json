@@ -2,7 +2,12 @@
   "appId": "cn.qujsh",
   "mac": {
     "category": "public.app-category.utilities",
-    "target": "dmg",
-    "arch": ["universal"]
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "executableName": "灵音"
   }
 }

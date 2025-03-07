@@ -1,6 +1,7 @@
 const { app, BrowserWindow, screen, ipcMain } = require("electron");
 const { exec } = require("child_process");
 const path = require("path");
+const waitOn = require("wait-on"); // 安装 wait-on
 
 let win;
 
@@ -56,7 +57,11 @@ app.whenReady().then(() => {
     console.error(`Next.js Error: ${data}`);
   });
 
-  createWindow();
+  // 使用 wait-on 等待 Next.js 服务器启动
+  waitOn({ resources: ["http://localhost:3000"] }, () => {
+    // 只有在 Next.js 启动后，才创建 Electron 窗口
+    createWindow();
+  });
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {

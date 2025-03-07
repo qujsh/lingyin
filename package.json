@@ -1,6 +1,7 @@
 {
   "name": "lingyin",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "author": "qujsh",
   "private": true,
   "main": "main.js",
   "scripts": {
