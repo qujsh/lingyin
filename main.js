@@ -1,7 +1,6 @@
 const { app, BrowserWindow, screen, ipcMain } = require("electron");
 const { exec } = require("child_process");
 const path = require("path");
-const waitOn = require("wait-on"); // 安装 wait-on
 
 let win;
 
@@ -15,7 +14,7 @@ function createWindow() {
     height: height, // 设置窗口高度为屏幕高度
     webPreferences: {
       preload: path.join(__dirname, "preload.js"), // 设置 preload 文件
-      nodeIntegration: true, // 允许在渲染进程中使用 Node.js API
+      nodeIntegration: false, // 允许在渲染进程中使用 Node.js API
       contextIsolation: true, // 禁用上下文隔离，确保 Next.js 和 Electron 能正常交互
       webSecurity: false, // 禁用 webSecurity，可以使用 file:// 协议来加载静态文件
     },
@@ -24,14 +23,53 @@ function createWindow() {
   // 加载 Next.js 应用
   // win.loadURL("http://localhost:3000"); // 这是 Next.js 开发服务器的默认端口
 
-  // 加载本地的 Next.js 静态文件
-  const indexPath = path.join(process.resourcesPath, "out", "index.html");
-  // const indexPath = path.join(__dirname, "out", "index.html");
-  // const indexPath = path.join(app.getAppPath(), "out", "index.html");
-  win.loadFile(indexPath); // 使用 file:// 协议来加载静态文件
+  // 修改加载后的页面中的静态文件路径
+  win.webContents.on("did-finish-load", () => {
+    console.log("did-finish-load triggered");
+  });
 
-  // 打开开发工具（可选）
+  win.webContents.on("did-fail-load", (event, errorCode, errorDescription) => {
+    console.error("Page failed to load:", errorCode, errorDescription);
+  });
+
+  win.webContents
+    .executeJavaScript('console.log("JavaScript executed in renderer")')
+    .then(() => {
+      console.log("JavaScript executed successfully");
+    })
+    .catch((err) => {
+      console.error("Error executing JavaScript:", err);
+    });
+
+  //开发环境
+  let indexPath = path.join(__dirname, "out", "index.html");
+  if (app.isPackaged) {
+    //生产环境，是否有打包
+    indexPath = path.join(process.resourcesPath, "out", "index.html");
+  }
+
+  // 加载本地的 Next.js 静态文件
+  win
+    .loadFile(indexPath)
+    .then(() => {
+      console.log("Page loaded successfully");
+    })
+    .catch((error) => {
+      console.error("Error loading page:", error);
+    }); // 使用 file:// 协议来加载静态文件
+
+  // 打开开发工具（仅在开发环境中）
+  // if (!app.isPackaged) {
   win.webContents.openDevTools();
+  // }
+}
+
+// mainWindow = new BrowserWindow({width: 1100, height: 700, icon: __dirname + '/icon.ico'}) mainWindow.loadURL(url.format({ pathname:'index.html', protocol: 'file', slashes: true }))
+
+// app.on('ready', () => { protocol.interceptFileProtocol('file', (request, callback) => { const url = request.url.substr(7)    /* all urls start with 'file://' */ callback({ path: path.normalize(${__dirname}/${url})}) }, (err) => { if (err) console.error('Failed to register protocol') }) createWindow() /* callback function */ })
+
+{
+  /* <base href="/">如果在 index.html 中出现这种情况，只需将其替换为<base href="./">。 */
 }
 
 // 监听从渲染进程发送的 "simulatePaste" 消息
@@ -68,12 +106,7 @@ app.whenReady().then(() => {
   // waitOn({ resources: ["http://localhost:3000"] }, () => {
   // 只有在 Next.js 启动后，才创建 Electron 窗口
   createWindow();
-  // });
-
-  const indexPath = path.join(__dirname, "out", "index.html");
-
-  console.log(indexPath);
-  console.log(app.getAppPath());
+  // })
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {

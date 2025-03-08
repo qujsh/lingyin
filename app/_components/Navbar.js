@@ -25,7 +25,7 @@ export default function App() {
       isBlurred={false}
     >
       <NavbarBrand className="flex items-center space-x-2">
-        <Image src="/favicon.ico" alt="Logo" width={36} height={36} />
+        <Image src="./favicon.ico" alt="Logo" width={36} height={36} />
 
         <p className="font-bold text-inherit">灵音</p>
       </NavbarBrand>

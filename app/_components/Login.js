@@ -84,7 +84,7 @@ export default function App() {
       <div className="grid place-items-center translate-y-1/2">
         <div className="w-2/5">
           <Image
-            src="/computer.svg"
+            src="./computer.svg"
             alt="Icon"
             width={50}
             height={50}
