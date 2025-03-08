@@ -8,6 +8,13 @@
         "arch": ["x64", "arm64"]
       }
     ],
-    "executableName": "灵音"
+    "executableName": "灵音",
+    "extraFiles": [
+      {
+        "from": "out/",
+        "to": "out",
+        "filter": ["**/*"]
+      }
+    ]
   }
 }

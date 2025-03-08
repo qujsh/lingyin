@@ -21,7 +21,11 @@ function createWindow() {
   });
 
   // 加载 Next.js 应用
-  win.loadURL("http://localhost:3000"); // 这是 Next.js 开发服务器的默认端口
+  // win.loadURL("http://localhost:3000"); // 这是 Next.js 开发服务器的默认端口
+
+  // 加载本地的 Next.js 静态文件
+  const indexPath = path.join(__dirname, "out", "index.html");
+  win.loadFile(indexPath); // 使用 file:// 协议来加载静态文件
 
   // 打开开发工具（可选）
   win.webContents.openDevTools();
@@ -47,21 +51,21 @@ ipcMain.on("simulate-paste", (event, arg) => {
 
 app.whenReady().then(() => {
   // 启动 Next.js 生产服务器
-  const nextServer = exec("npm run start");
+  // const nextServer = exec("npm run start");
 
-  nextServer.stdout.on("data", (data) => {
-    console.log(`Next.js: ${data}`);
-  });
+  // nextServer.stdout.on("data", (data) => {
+  //   console.log(`Next.js: ${data}`);
+  // });
 
-  nextServer.stderr.on("data", (data) => {
-    console.error(`Next.js Error: ${data}`);
-  });
+  // nextServer.stderr.on("data", (data) => {
+  //   console.error(`Next.js Error: ${data}`);
+  // });
 
   // 使用 wait-on 等待 Next.js 服务器启动
-  waitOn({ resources: ["http://localhost:3000"] }, () => {
-    // 只有在 Next.js 启动后，才创建 Electron 窗口
-    createWindow();
-  });
+  // waitOn({ resources: ["http://localhost:3000"] }, () => {
+  // 只有在 Next.js 启动后，才创建 Electron 窗口
+  createWindow();
+  // });
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
