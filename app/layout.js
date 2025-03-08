@@ -3,6 +3,7 @@ import "./styles/globals.css";
 import Navbar from "@/app/_components/Navbar";
 import Guide from "@/app/_components/Guide";
 import Login from "@/app/_components/Login";
+import { GlobalProvider } from "@/app/_components/GlobalContext";
 
 export const metadata = {
   title: "灵音 | 感受交流的灵动",
@@ -22,14 +23,16 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`antialiased`}>
         <main className="flex flex-col h-screen ">
-          <div className="absolute inset-0 -z-10 w-full h-screen bg-[url('https://qujsh.cn/public/river.jpg')] bg-cover bg-top bg-no-repeat opacity-25"></div>
+          <div className="absolute inset-0 -z-10 w-full h-screen bg-[url('https://qujsh.cn/river.jpg')] bg-cover bg-top bg-no-repeat opacity-25"></div>
 
-          <Navbar />
+          <GlobalProvider>
+            <Navbar />
 
-          <div className="flex-1 flex">
-            <Guide />
-            <Login />
-          </div>
+            <div className="flex-1 flex">
+              <Guide />
+              <Login />
+            </div>
+          </GlobalProvider>
         </main>
 
         {/* {children} */}

@@ -14,10 +14,13 @@ import {
   Chip,
 } from "@heroui/react";
 import Image from "next/image";
+import { useGlobalContext } from "@/app/_components/GlobalContext";
 
 import "../styles/Navbar.css";
 
 export default function App() {
+  const { assetPrefix } = useGlobalContext(); // 获取全局的 assetPrefix
+
   return (
     <Navbar
       id="main-navbar"
@@ -25,7 +28,12 @@ export default function App() {
       isBlurred={false}
     >
       <NavbarBrand className="flex items-center space-x-2">
-        <Image src="./favicon.ico" alt="Logo" width={36} height={36} />
+        <Image
+          src={`${assetPrefix}/favicon.ico`}
+          alt="Logo"
+          width={36}
+          height={36}
+        />
 
         <p className="font-bold text-inherit">灵音</p>
       </NavbarBrand>

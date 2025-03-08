@@ -6,9 +6,12 @@ import ConnectingDots from "@/app/_components/ConnectingDots";
 import { Button } from "@heroui/react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
+import { useGlobalContext } from "@/app/_components/GlobalContext";
 
 /* svg 来源： https://undraw.co/search/computer */
 export default function App() {
+  const { assetPrefix } = useGlobalContext(); // 获取全局的 assetPrefix
+
   const [username, setUsername] = useState(
     // "user" + Math.floor(Math.random() * 1000)
     "qujsh"
@@ -85,7 +88,7 @@ export default function App() {
       <div className="grid place-items-center translate-y-1/2">
         <div className="w-2/5">
           <Image
-            src="./computer.svg"
+            src={`${assetPrefix}/computer.svg`}
             alt="Icon"
             width={50}
             height={50}

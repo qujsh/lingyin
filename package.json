@@ -9,10 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "electron": "electron .",
-    "electron:dev": "concurrently \"npm run dev\" \"npm run electron\"",
-    "electron:wait": "wait-on http://localhost:3000 && electron .",
-    "electron:build": "next build && electron-builder"
+    "electron": "export ELT_ENV=package && next build && electron .",
+    "electron:build": "export ELT_ENV=package && next build && electron-builder"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
