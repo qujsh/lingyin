@@ -44,7 +44,8 @@ export default function App() {
 
           // 确保 window.electron 存在，并调用 simulatePaste
           if (window.electron) {
-            window.electron.simulatePaste();
+            const body = JSON.parse(message.body);
+            window.electron.simulatePaste(body.content);
           } else {
             console.error("electron object is not available");
           }
@@ -94,6 +95,7 @@ export default function App() {
 
         <Button
           onPress={(e) => connectWs(e)}
+          isDisabled
           className="translate-y-6 w-1/6 rounded-full bt-color "
         >
           {/* <ConnectingDots /> */}
@@ -103,6 +105,7 @@ export default function App() {
         {/* {connected && ( */}
         <Button
           onPress={sendMessage}
+          isDisabled
           className="translate-y-6 w-1/6 rounded-full bt-color mt-4"
         >
           发送消息
