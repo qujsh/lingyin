@@ -10,7 +10,7 @@ import { useGlobalContext } from "@/app/_components/GlobalContext";
 
 /* svg 来源： https://undraw.co/search/computer */
 export default function App() {
-  const { assetPrefix } = useGlobalContext(); // 获取全局的 assetPrefix
+  const { assetPrefix, online } = useGlobalContext(); // 获取全局的 assetPrefix
 
   const [username, setUsername] = useState(
     // "user" + Math.floor(Math.random() * 1000)
@@ -88,7 +88,7 @@ export default function App() {
       <div className="grid place-items-center translate-y-1/2">
         <div className="w-2/5">
           <Image
-            src={`${assetPrefix}/computer.svg`}
+            src={`${assetPrefix}/process.svg`}
             alt="Icon"
             width={50}
             height={50}
@@ -98,10 +98,9 @@ export default function App() {
 
         <Button
           onPress={(e) => connectWs(e)}
-          isDisabled
+          {...(online ? { isDisabled: true } : {})}
           className="translate-y-6 w-1/6 rounded-full bt-color "
         >
-          {/* <ConnectingDots /> */}
           连接服务
         </Button>
 

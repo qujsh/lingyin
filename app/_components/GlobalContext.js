@@ -7,6 +7,7 @@ const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [assetPrefix, setAssetPrefix] = useState(LOCAL_URL);
+  const [online, setOnline] = useState(false);
 
   useEffect(() => {
     const isProd = process.env.NODE_ENV === "production";
@@ -15,13 +16,15 @@ export const GlobalProvider = ({ children }) => {
     // 根据环境选择路径
     if (isPackage || !isProd) {
       setAssetPrefix(LOCAL_URL);
+      setOnline(false);
     } else {
       setAssetPrefix(CDN_URL);
+      setOnline(true);
     }
   }, []);
 
   return (
-    <GlobalContext.Provider value={{ assetPrefix }}>
+    <GlobalContext.Provider value={{ assetPrefix, online }}>
       {children}
     </GlobalContext.Provider>
   );
