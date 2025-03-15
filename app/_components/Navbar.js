@@ -35,7 +35,7 @@ export default function App() {
           height={36}
         />
 
-        <p className="font-bold text-inherit">灵音</p>
+        <p className="font-bold text-inherit">凌音</p>
       </NavbarBrand>
 
       <NavbarContent as="div" justify="end" className="flex justify-end ">

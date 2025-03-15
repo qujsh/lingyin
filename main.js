@@ -54,8 +54,8 @@ ipcMain.on("simulate-paste", (event, text) => {
       'osascript -e "tell application \\"System Events\\"" ' +
         '-e "keystroke \\"v\\" using command down" ' + // ⌘+V
         // 加个是否要输出回车的控制，有些场景需要有些场景不需要，比如我就是用来进行办公的，要打很多字要手动介入控制
-        // '-e "delay 0.05" ' + // 等待 0.2 秒
-        // '-e "key code 36" ' + // 按下 Enter（Return 键的 key code = 36）
+        '-e "delay 0.02" ' + // 等待 0.02 秒
+        '-e "key code 36" ' + // 按下 Enter（Return 键的 key code = 36）
         '-e "end tell"',
       (error) => {
         if (error) console.error("Error executing osascript:", error);

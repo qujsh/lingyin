@@ -84,11 +84,11 @@ export default function App() {
   }
 
   return (
-    <div className="w-[40vw]  p-6 bg-white/80 shadow-[0_3rem_6rem_rgba(0,0,0,0.1)]">
+    <div className="w-[35vw]  p-6 bg-white/80 shadow-[0_3rem_6rem_rgba(0,0,0,0.1)]">
       <div className="grid place-items-center translate-y-1/2">
-        <div className="w-2/5">
+        <div className="w-3/5">
           <Image
-            src={`${assetPrefix}/process.svg`}
+            src={`${assetPrefix}/team.svg`}
             alt="Icon"
             width={50}
             height={50}
@@ -99,7 +99,7 @@ export default function App() {
         <Button
           onPress={(e) => connectWs(e)}
           {...(online ? { isDisabled: true } : {})}
-          className="translate-y-6 w-1/6 rounded-full bt-color "
+          className="translate-y-10 w-1/6 rounded-full bt-color "
         >
           连接服务
         </Button>
@@ -108,7 +108,7 @@ export default function App() {
         <Button
           onPress={sendMessage}
           isDisabled
-          className="translate-y-6 w-1/6 rounded-full bt-color mt-4"
+          className="translate-y-10 w-1/6 rounded-full bt-color mt-4"
         >
           发送消息
         </Button>

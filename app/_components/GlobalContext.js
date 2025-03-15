@@ -1,26 +1,28 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { CDN_URL, LOCAL_URL } from "@/config.mjs";
+import { CDN_URL, LOCAL_URL, DEV_URL } from "@/config.mjs";
 
 const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
+  //域名前缀
   const [assetPrefix, setAssetPrefix] = useState(LOCAL_URL);
+  //是否为线上网页上版本，比如线上网页版本不适用的功能
   const [online, setOnline] = useState(false);
 
   useEffect(() => {
-    const isProd = process.env.NODE_ENV === "production";
-    const isPackage = process.env.ELT_ENV === "package";
-
     // 根据环境选择路径
-    if (isPackage || !isProd) {
-      setAssetPrefix(LOCAL_URL);
+    let assetPrefix = CDN_URL;
+    setOnline(true);
+    if (process.env.NODE_ENV === "development") {
+      assetPrefix = DEV_URL;
+
       setOnline(false);
-    } else {
-      setAssetPrefix(CDN_URL);
-      setOnline(true);
+    } else if (process.env.ELT_ENV === "package") {
+      assetPrefix = LOCAL_URL;
     }
+    setAssetPrefix(assetPrefix);
   }, []);
 
   return (
