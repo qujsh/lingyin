@@ -14,15 +14,16 @@ export const GlobalProvider = ({ children }) => {
   useEffect(() => {
     // 根据环境选择路径
     let assetPrefix = CDN_URL;
-    setOnline(true);
+    let online = true;
     if (process.env.NODE_ENV === "development") {
       assetPrefix = DEV_URL;
-
-      setOnline(false);
+      online = false;
     } else if (process.env.ELT_ENV === "package") {
       assetPrefix = LOCAL_URL;
+      online = false;
     }
     setAssetPrefix(assetPrefix);
+    setOnline(online);
   }, []);
 
   return (

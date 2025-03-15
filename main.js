@@ -16,7 +16,8 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"), // 设置 preload 文件
       nodeIntegration: false, // 允许在渲染进程中使用 Node.js API
       contextIsolation: true, // 禁用上下文隔离，确保 Next.js 和 Electron 能正常交互
-      webSecurity: false, // 禁用 webSecurity，可以使用 file:// 协议来加载静态文件
+      enableRemoteModule: false, // 关闭远程模块
+      // webSecurity: false, // 禁用 webSecurity，可以使用 file:// 协议来加载静态文件
     },
   });
 

@@ -12,6 +12,9 @@ const nextConfig = {
   output: "export", // 导出静态文件
   assetPrefix,
   images: { unoptimized: true },
+  env: {
+    ELT_ENV: process.env.ELT_ENV, // 这样前端可以访问
+  },
 };
 
 export default nextConfig;
