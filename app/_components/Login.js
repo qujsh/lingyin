@@ -84,7 +84,7 @@ export default function App() {
   }
 
   return (
-    <div className="w-[35vw]  p-6 bg-white/80 shadow-[0_3rem_6rem_rgba(0,0,0,0.1)]">
+    <div className=" p-6 h-full bg-white/80 shadow-[0_3rem_6rem_rgba(0,0,0,0.1)]">
       <div className="grid place-items-center translate-y-1/2">
         <div className="w-3/5">
           <Image

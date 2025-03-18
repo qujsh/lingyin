@@ -8,7 +8,7 @@ export default function App() {
   const { assetPrefix } = useGlobalContext(); // 获取全局的 assetPrefix
 
   return (
-    <div className="w-[65vw] p-6 bg-white/50 shadow-[0_3rem_6rem_rgba(0,0,0,0.1)]">
+    <div className="p-6 h-full bg-white/50 shadow-[0_3rem_6rem_rgba(0,0,0,0.1)]">
       <div className="m-4 mt-8">
         <h2 className="text-2xl font-bold">欢迎使用凌音小助手</h2>
       </div>

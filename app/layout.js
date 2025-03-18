@@ -1,12 +1,10 @@
 import Image from "next/image";
 import "./styles/globals.css";
-import Navbar from "@/app/_components/Navbar";
-import Guide from "@/app/_components/Guide";
-import Login from "@/app/_components/Login";
+
 import { GlobalProvider } from "@/app/_components/GlobalContext";
 
 export const metadata = {
-  title: "凌音 | 感受交流的灵动",
+  title: "凌音 | 感受语音的助力",
   description: "跨系统、跨应用、跨端的语言交流和记录工具",
 };
 
@@ -26,20 +24,11 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`antialiased`}>
-        <main className="flex flex-col h-screen ">
+        <main className="flex  h-screen ">
           <div className="absolute inset-0 -z-10 w-full h-screen bg-[url('https://qujsh.cn/river.jpg')] bg-cover bg-top bg-no-repeat opacity-25"></div>
 
-          <GlobalProvider>
-            <Navbar />
-
-            <div className="flex-1 flex">
-              <Guide />
-              <Login />
-            </div>
-          </GlobalProvider>
+          <GlobalProvider>{children}</GlobalProvider>
         </main>
-
-        {/* {children} */}
       </body>
     </html>
   );
