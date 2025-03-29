@@ -1,7 +1,7 @@
 "use client";
 
 // import Navbar from "@/app/_components/Navbar";
-import Guide from "@/app/_components/Guide";
+import Chat from "@/app/_components/Chat";
 import Login from "@/app/_components/Login";
 // import Sidebar from "@/app/_components/Sidebar";
 import { HeroUIProvider } from "@heroui/react";
@@ -12,7 +12,7 @@ export default function Home() {
     <div className="flex flex-1 w-full h-full">
       {/* Guide: 占65%的宽度 */}
       <div className="flex-shrink-0 w-[65%] h-full">
-        <Guide />
+        <Chat />
       </div>
 
       {/* Login: 占35%的宽度 */}

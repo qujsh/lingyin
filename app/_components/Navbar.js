@@ -16,7 +16,7 @@ import {
 import Image from "next/image";
 import { useGlobalContext } from "@/app/_components/GlobalContext";
 
-import "../styles/Navbar.css";
+import "../styles/navbar.css";
 
 export default function App() {
   const { assetPrefix } = useGlobalContext(); // 获取全局的 assetPrefix

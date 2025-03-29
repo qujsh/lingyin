@@ -17,6 +17,7 @@
     "@heroui/react": "^2.7.4",
     "@stomp/stompjs": "^7.0.0",
     "autoprefixer": "^10.4.20",
+    "mac-scrollbar": "^0.13.8",
     "motion": "^12.4.10",
     "next": "15.2.0",
     "postcss": "^8.5.3",

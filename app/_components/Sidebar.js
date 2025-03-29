@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useGlobalContext } from "@/app/_components/GlobalContext";
 
 const Sidebar = () => {
@@ -10,15 +12,30 @@ const Sidebar = () => {
   return (
     <div className="h-screen text-[oklch(0.274_0.006_286.033)] bg-[#f9f9f9] opacity-75 flex flex-col p-4">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg  font-bold ">侧边栏</h2>
-
-        {/* https://www.svgrepo.com/vectors/sidebar/2 */}
+        {/* <h2 className="text-lg  font-bold ">侧边栏</h2> */}
         <Image
-          src={`${assetPrefix}/sidebar-close.svg`}
+          src={`${assetPrefix}/search.svg`}
           alt="Icon"
-          width={30}
-          height={30}
+          width={28}
+          height={28}
         />
+
+        <div className="flex gap-2">
+          <Image
+            src={`${assetPrefix}/add-file.svg`}
+            alt="Icon"
+            width={32}
+            height={32}
+          />
+
+          {/* https://www.svgrepo.com/vectors/sidebar/2 */}
+          <Image
+            src={`${assetPrefix}/sidebar-close.svg`}
+            alt="Icon"
+            width={30}
+            height={30}
+          />
+        </div>
       </div>
 
       {/* {["首页", "控制面板", "设置"].map((item) => (
@@ -42,25 +59,13 @@ const Sidebar = () => {
           </div>
           <ul>
             <li
-              className="flex items-center rounded-lg text-sm px-2 py-1 h-9 hover:bg-[#ececec] active:opacity-90 aria-selected:bg-[#e3e3e3] cursor-pointer"
+              className="rounded-lg text-sm hover:bg-[#ececec] active:opacity-90 aria-selected:bg-[#e3e3e3] cursor-pointer"
               role="option"
               aria-selected="true"
             >
-              <span>首页</span>
-            </li>
-            <li
-              className="flex items-center rounded-lg text-sm px-2 py-1 h-9 hover:bg-[#ececec] active:opacity-90 aria-selected:bg-[#e3e3e3] cursor-pointer"
-              role="option"
-              aria-selected="false"
-            >
-              控制面板
-            </li>
-            <li
-              className="flex items-center rounded-lg text-sm px-2 py-1 h-9 hover:bg-[#ececec] aria-selected:bg-[#e3e3e3] cursor-pointer"
-              role="option"
-              aria-selected="false"
-            >
-              设置
+              <Link href="/chat" className="flex w-full h-9 items-center px-2">
+                短文本入口
+              </Link>
             </li>
           </ul>
         </div>
@@ -68,7 +73,7 @@ const Sidebar = () => {
         <div className="relative mt-5 first:mt-0 last:mb-5">
           <div className="sticky top-0">
             <span className="inline-block px-2 text-xs font-semibold text-ellipsis overflow-hidden break-all pt-3 pb-2">
-              默认入口
+              回收箱
             </span>
           </div>
           <ul>
@@ -77,21 +82,21 @@ const Sidebar = () => {
               role="option"
               aria-selected="true"
             >
-              <span>首页</span>
+              <span>短文本</span>
             </li>
             <li
               className="flex items-center rounded-lg text-sm px-2 py-1 h-9 hover:bg-[#ececec] active:opacity-90 aria-selected:bg-[#e3e3e3] cursor-pointer"
               role="option"
               aria-selected="false"
             >
-              控制面板
+              会话1
             </li>
             <li
               className="flex items-center rounded-lg text-sm px-2 py-1 h-9 hover:bg-[#ececec] aria-selected:bg-[#e3e3e3] cursor-pointer"
               role="option"
               aria-selected="false"
             >
-              设置
+              会话2
             </li>
           </ul>
         </div>

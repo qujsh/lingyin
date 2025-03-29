@@ -1,6 +1,9 @@
-import Image from "next/image";
+// import Image from "next/image";
 import "./styles/globals.css";
-
+import Navbar from "@/app/_components/Navbar";
+// import Guide from "@/app/_components/Guide";
+// import Login from "@/app/_components/Login";
+import Sidebar from "@/app/_components/Sidebar";
 import { GlobalProvider } from "@/app/_components/GlobalContext";
 
 export const metadata = {
@@ -24,10 +27,26 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`antialiased`}>
-        <main className="flex  h-screen ">
-          <div className="absolute inset-0 -z-10 w-full h-screen bg-[url('https://qujsh.cn/river.jpg')] bg-cover bg-top bg-no-repeat opacity-25"></div>
+        <main className="flex   h-screen ">
+          {/* bg-[url('https://qujsh.cn/river.jpg')] */}
+          <div className="absolute inset-0 -z-10 w-full h-screen bg-[url('/river.jpg')] bg-cover bg-top bg-no-repeat opacity-25"></div>
 
-          <GlobalProvider>{children}</GlobalProvider>
+          <GlobalProvider>
+            <div className="flex flex-1 h-screen">
+              {/* Sidebar: 固定宽度260px */}
+              <div className="w-[260px] h-full ">
+                <Sidebar />
+              </div>
+
+              {/* Main Content */}
+              <div className="flex flex-1 flex-col h-full">
+                {/* Navbar */}
+                <Navbar className="w-full" />
+
+                {children}
+              </div>
+            </div>
+          </GlobalProvider>
         </main>
       </body>
     </html>
