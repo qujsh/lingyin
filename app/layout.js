@@ -5,6 +5,7 @@ import Navbar from "@/app/_components/Navbar";
 // import Login from "@/app/_components/Login";
 import Sidebar from "@/app/_components/Sidebar";
 import { GlobalProvider } from "@/app/_components/GlobalContext";
+import Script from "next/script";
 
 export const metadata = {
   title: "凌音 | 感受语音的助力",

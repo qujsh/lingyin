@@ -17,27 +17,33 @@ function createWindow() {
       nodeIntegration: false, // 允许在渲染进程中使用 Node.js API
       contextIsolation: true, // 禁用上下文隔离，确保 Next.js 和 Electron 能正常交互
       enableRemoteModule: false, // 关闭远程模块
-      // webSecurity: false, // 禁用 webSecurity，可以使用 file:// 协议来加载静态文件
+      webSecurity: false, // 禁用 webSecurity，可以使用 file:// 协议来加载静态文件和访问https跳转地址，开发环境开启
     },
   });
 
-  // 加载 Next.js 应用
-  // win.loadURL("http://localhost:3000"); // 这是 Next.js 开发服务器的默认端口
-
-  //开发环境
-  let indexPath = path.join(__dirname, "out", "index.html");
+  // 这是 Next.js 开发服务器的默认端口
+  let webUrl = "http://localhost:3000";
   if (app.isPackaged) {
-    //生产环境，是否有打包
-    indexPath = path.join(process.resourcesPath, "out", "index.html");
+    webUrl = "https://nextvoice.cn";
   }
 
-  // 加载本地的 Next.js 静态文件
-  win.loadFile(indexPath); // 使用 file:// 协议来加载静态文件
+  // 加载 Next.js 应用
+  win.loadURL(webUrl);
+
+  //开发环境
+  // let indexPath = path.join(__dirname, "out", "index.html");
+  // if (app.isPackaged) {
+  //   //生产环境，是否有打包
+  //   indexPath = path.join(process.resourcesPath, "out", "index.html");
+  // }
+
+  // // 加载本地的 Next.js 静态文件
+  // win.loadFile(indexPath); // 使用 file:// 协议来加载静态文件
 
   // 打开开发工具（仅在开发环境中）
-  // if (!app.isPackaged) {
-  win.webContents.openDevTools();
-  // }
+  if (!app.isPackaged) {
+    win.webContents.openDevTools();
+  }
 }
 
 // 监听从渲染进程发送的 "simulatePaste" 消息

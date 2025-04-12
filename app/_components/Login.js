@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import ConnectingDots from "@/app/_components/ConnectingDots";
 import { Button } from "@heroui/react";
@@ -83,6 +83,39 @@ export default function App() {
     }
   }
 
+  useEffect(() => {
+    const loadScript = (src) => {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.async = true;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.body.appendChild(script);
+      });
+    };
+
+    loadScript("https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js")
+      .then(() => {
+        const obj = new window.WxLogin({
+          id: "wx-qrcode",
+          appid: "wxe0e6ad32a9a8bd02",
+          scope: "snsapi_login",
+          redirect_uri: encodeURIComponent(
+            "https://mainto.run.hzmantu.com/weixin/callback"
+          ),
+          state: "custom_state_123456", // 可用UUID防CSRF
+          style: "black",
+          onReady: function (isReady) {
+            console.log(isReady);
+          },
+        });
+      })
+      .catch((err) => {
+        console.error("微信登录脚本加载失败", err);
+      });
+  }, []);
+
   return (
     <div className=" p-6 h-full bg-white/80 shadow-[0_3rem_6rem_rgba(0,0,0,0.1)]">
       <div className="grid place-items-center translate-y-1/2">
@@ -94,6 +127,7 @@ export default function App() {
             height={50}
             style={{ width: "100%", height: "auto" }}
           />
+          <div id="wx-qrcode"></div>
         </div>
 
         <Button
