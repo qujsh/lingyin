@@ -1,16 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import ConnectingDots from "@/app/_components/ConnectingDots";
-import { Button } from "@heroui/react";
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+  useDraggable,
+} from "@heroui/react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { useGlobalContext } from "@/app/_components/GlobalContext";
+import { v4 as uuidv4 } from "uuid";
+import { encrypt } from "@/app/_lib/aesUtil";
+import request from "@/app/_lib/request";
 
 /* svg 来源： https://undraw.co/search/computer */
 export default function App() {
-  const { assetPrefix, online } = useGlobalContext(); // 获取全局的 assetPrefix
+  const { assetPrefix, online, requestUrls } = useGlobalContext(); // 获取全局的 assetPrefix
 
   const [username, setUsername] = useState(
     // "user" + Math.floor(Math.random() * 1000)
@@ -83,38 +95,76 @@ export default function App() {
     }
   }
 
-  useEffect(() => {
-    const loadScript = (src) => {
-      return new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        script.src = src;
-        script.async = true;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.body.appendChild(script);
-      });
-    };
+  //微信登录二维码
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const targetRef = useRef(null);
+  const { moveProps } = useDraggable({ targetRef, isDisabled: !isOpen });
+  const [modalPlacement, setModalPlacement] = useState("auto");
+  const [state, setState] = useState("");
 
-    loadScript("https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js")
-      .then(() => {
-        const obj = new window.WxLogin({
-          id: "wx-qrcode",
-          appid: "wxe0e6ad32a9a8bd02",
-          scope: "snsapi_login",
-          redirect_uri: encodeURIComponent(
-            "https://mainto.run.hzmantu.com/weixin/callback"
-          ),
-          state: "custom_state_123456", // 可用UUID防CSRF
-          style: "black",
-          onReady: function (isReady) {
-            console.log(isReady);
+  const loadScript = (src) => {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.body.appendChild(script);
+    });
+  };
+
+  useEffect(() => {
+    const wxLoginState = localStorage.getItem("wx_login_state");
+    if (wxLoginState == null) {
+      //表示未登录过
+      const state = uuidv4();
+      setState(state);
+      localStorage.setItem("wx_login_state", encrypt(state));
+    } else {
+      //尝试获取远程用户数据
+      request
+        .get(lingyinConfig.requestUrls.wxwebUserInfo, {
+          params: {
+            state: wxLoginState,
           },
+        })
+        .then((data) => {
+          console.log("用户信息：", data);
+        })
+        .catch((err) => {
+          console.error("获取用户信息失败", err);
         });
-      })
-      .catch((err) => {
-        console.error("微信登录脚本加载失败", err);
-      });
+    }
   }, []);
+
+  useEffect(() => {
+    console.log(state, "isOpen");
+    console.log(process.env.DOMAIN, process.env.DOMAIN + "/api/wxweb/callback");
+
+    if (isOpen) {
+      loadScript(
+        "https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"
+      )
+        .then(() => {
+          const obj = new window.WxLogin({
+            id: "wx-qrcode",
+            appid: "wxe0e6ad32a9a8bd02",
+            scope: "snsapi_login",
+            redirect_uri: encodeURIComponent(
+              "https://" + process.env.DOMAIN + "/api/wxweb/callback"
+            ),
+            state: state,
+            style: "black",
+            onReady: function (isReady) {
+              console.log(isReady);
+            },
+          });
+        })
+        .catch((err) => {
+          console.error("微信登录脚本加载失败", err);
+        });
+    }
+  }, [isOpen, state]);
 
   return (
     <div className=" p-6 h-full bg-white/80 shadow-[0_3rem_6rem_rgba(0,0,0,0.1)]">
@@ -127,8 +177,14 @@ export default function App() {
             height={50}
             style={{ width: "100%", height: "auto" }}
           />
-          <div id="wx-qrcode"></div>
         </div>
+
+        <Button
+          onPress={onOpen}
+          className="translate-y-10 w-1/6 rounded-full bt-color "
+        >
+          微信登录
+        </Button>
 
         <Button
           onPress={(e) => connectWs(e)}
@@ -148,6 +204,26 @@ export default function App() {
         </Button>
         {/* )} */}
       </div>
+
+      <Modal
+        ref={targetRef}
+        placement={modalPlacement}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader {...moveProps} className="flex flex-col gap-1">
+                &nbsp;
+              </ModalHeader>
+              <ModalBody className="flex justify-center items-center h-full">
+                <div id="wx-qrcode" className="mb-8"></div>
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

@@ -1,5 +1,27 @@
 // config.js 做统一环境变量处理
-// export const CDN_URL = "https://qujsh.cn";
-//有来个URL路径，默认是开发环境包括（dev和build），一个是cdn环境（electron使用）
-export const CDN_URL = "https://lingyin.tos-cn-shanghai.volces.com";
-export const DEV_URL = "";
+const CDN_URL = "https://lingyin.tos-cn-shanghai.volces.com";
+const DEV_URL = "";
+let assetPrefix = DEV_URL;
+let online = false;
+if (process.env.ELT_ENV === "package") {
+  assetPrefix = CDN_URL + "/public";
+  online = true;
+}
+
+//还涉及到 ase的16位程度加密
+const DOMAIN = "www.nextvoice.cn";
+let localDomain = "http://localhost:8080";
+if (process.env.ELT_ENV === "package") {
+  localDomain = "https://" + DOMAIN + "/api";
+}
+
+const lingyinConfig = {
+  domain: DOMAIN,
+  assetPrefix, //cdn 静态域名前缀
+  online,
+  requestUrls: {
+    wxwebUserInfo: localDomain + "/wxweb/userInfo", //请求用户信息
+  },
+};
+
+export default lingyinConfig;

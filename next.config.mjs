@@ -1,18 +1,13 @@
 /** @type {import('next').NextConfig} */
-import { CDN_URL, DEV_URL } from "./config.mjs";
-
-let assetPrefix = DEV_URL;
-
-if (process.env.ELT_ENV === "package") {
-  assetPrefix = CDN_URL;
-}
+import lingyinConfig from "./config.mjs";
 
 const nextConfig = {
   // output: "export", // 导出静态文件，不使用静态模式，还是使用网络请求访问
-  assetPrefix,
   // images: { unoptimized: true },
+  //环境变量
   env: {
     ELT_ENV: process.env.ELT_ENV, // 这样前端可以访问
+    DOMAIN: lingyinConfig.domain, //还涉及到 ase的16位程度加密
   },
 };
 
