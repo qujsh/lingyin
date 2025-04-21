@@ -19,15 +19,14 @@ import { useGlobalContext } from "@/app/_components/GlobalContext";
 import { v4 as uuidv4 } from "uuid";
 import { encrypt } from "@/app/_lib/aesUtil";
 import request from "@/app/_lib/request";
+import { wxwebUserInfo } from "@/app/_models/user/userInfo";
 
 /* svg 来源： https://undraw.co/search/computer */
 export default function App() {
-  const { assetPrefix, online, requestUrls } = useGlobalContext(); // 获取全局的 assetPrefix
+  const { assetPrefix, online, requestUrls, userInfo, setUserInfo } =
+    useGlobalContext(); // 获取全局的 assetPrefix
 
-  const [username, setUsername] = useState(
-    // "user" + Math.floor(Math.random() * 1000)
-    "qujsh"
-  );
+  const [username, setUsername] = useState("");
   const [stompClient, setStompClient] = useState(null);
   const [connected, setConnected] = useState(false);
 
@@ -39,7 +38,7 @@ export default function App() {
       return;
     }
 
-    const socket = new SockJS("http://localhost:8080/ws"); // 服务器 WebSocket 地址
+    const socket = new SockJS(requestUrls.ws); // 服务器 WebSocket 地址
     const client = new Client({
       webSocketFactory: () => socket,
       debug: (str) => console.log(str),
@@ -121,15 +120,22 @@ export default function App() {
       setState(state);
       localStorage.setItem("wx_login_state", encrypt(state));
     } else {
-      //尝试获取远程用户数据
+      //获取远程用户数据
       request
-        .get(lingyinConfig.requestUrls.wxwebUserInfo, {
+        .get(requestUrls.wxwebUserInfo, {
           params: {
             state: wxLoginState,
           },
         })
         .then((data) => {
-          console.log("用户信息：", data);
+          const userInfo = {
+            ...wxwebUserInfo,
+            ...data,
+          };
+          //更新全局用户信息
+          setUserInfo(userInfo);
+          //ws的连接名
+          setUsername(userInfo?.unionId || "");
         })
         .catch((err) => {
           console.error("获取用户信息失败", err);

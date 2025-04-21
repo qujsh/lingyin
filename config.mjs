@@ -20,7 +20,9 @@ const lingyinConfig = {
   assetPrefix, //cdn 静态域名前缀
   online,
   requestUrls: {
+    ws: localDomain + "/ws", //请求用户信息
     wxwebUserInfo: localDomain + "/wxweb/userInfo", //请求用户信息
+    wxwebLogoutUser: localDomain + "/wxweb/logoutUser", //退出登录
   },
 };
 

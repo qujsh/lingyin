@@ -17,9 +17,32 @@ import Image from "next/image";
 import { useGlobalContext } from "@/app/_components/GlobalContext";
 
 import "../styles/navbar.css";
+import request from "../_lib/request";
 
 export default function App() {
-  const { assetPrefix } = useGlobalContext(); // 获取全局的 assetPrefix
+  const { assetPrefix, requestUrls, userInfo, setUserInfo } =
+    useGlobalContext(); // 获取全局的 assetPrefix
+
+  const handleLogout = () => {
+    const wxLoginState = localStorage.getItem("wx_login_state");
+
+    request
+      .delete(requestUrls.wxwebLogoutUser, {
+        params: {
+          state: wxLoginState,
+        },
+      })
+      .then((data) => {
+        if (data) {
+          localStorage.removeItem("wx_login_state");
+          //更新全局用户信息
+          setUserInfo(null);
+        }
+      })
+      .catch((err) => {
+        console.error("退出登录失败", err);
+      });
+  };
 
   return (
     <Navbar
@@ -66,22 +89,33 @@ export default function App() {
               color="default"
               name="Jason Hughes"
               size="sm"
-              src="https://cdn.auth0.com/avatars/default.png"
+              src={
+                userInfo?.headimg || "https://cdn.auth0.com/avatars/default.png"
+              }
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+            <DropdownItem
+              key="profile"
+              className="h-14"
+              textValue={`你好，${userInfo?.nickname ?? ""}`}
+            >
+              你好，{userInfo?.nickname}
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
-              Log Out
+            <DropdownItem
+              key="logout"
+              textValue="退出登录"
+              onClick={handleLogout}
+            >
+              <div className="flex items-center gap-x-2">
+                <Image
+                  src={`${assetPrefix}/logout.svg`}
+                  alt="Icon"
+                  width={25}
+                  height={25}
+                />
+                <span>退出登录</span>
+              </div>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

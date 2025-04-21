@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { lingyinConfig } from "@/config/config";
+import { apiResult } from "@/app/_models/result";
 
 //todo
 const request = axios.create({
@@ -27,7 +27,14 @@ request.interceptors.request.use(
 
 // 响应拦截器：统一处理错误
 request.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    // 合并默认结构，避免字段 undefined
+    const result = {
+      ...apiResult,
+      ...response.data,
+    };
+    return result.msg;
+  },
   (error) => {
     if (error.response) {
       console.error("请求失败:", error.response.status, error.response.data);
