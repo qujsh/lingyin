@@ -20,7 +20,7 @@ import "../styles/navbar.css";
 import request from "../_lib/request";
 
 export default function App() {
-  const { assetPrefix, requestUrls, userInfo, setUserInfo } =
+  const { assetPrefix, requestUrls, userInfo, setUserInfo, setWxLoginState } =
     useGlobalContext(); // 获取全局的 assetPrefix
 
   const handleLogout = () => {
@@ -71,6 +71,7 @@ export default function App() {
         >
           未连接
         </Chip>
+
         <Chip
           color="success"
           size="sm"
@@ -80,6 +81,7 @@ export default function App() {
         >
           已连接
         </Chip>
+
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar

@@ -65,6 +65,9 @@ ipcMain.on("simulate-paste", (event, text) => {
         '-e "key code 36" ' + // 按下 Enter（Return 键的 key code = 36）
         '-e "end tell"',
       (error) => {
+        //在这个地方可以捕获到
+        // Error executing osascript: Error: Command failed: osascript -e "tell application \"System Events\"" -e "keystroke \"v\" using command down" -e "delay 0.05" -e "key code 36" -e "end tell"
+        //[1] 33:65: execution error: “System Events”遇到一个错误：“osascript”不允许发送按键。 (1002)
         if (error) console.error("Error executing osascript:", error);
       }
     );

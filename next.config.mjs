@@ -7,7 +7,8 @@ const nextConfig = {
   //环境变量
   env: {
     ELT_ENV: process.env.ELT_ENV, // 这样前端可以访问
-    DOMAIN: lingyinConfig.domain, //还涉及到 ase的16位程度加密
+    DOMAIN: lingyinConfig.domain,
+    SECRET_KEY: lingyinConfig.key, // ase的16位程度加密
   },
 };
 

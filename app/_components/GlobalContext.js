@@ -15,7 +15,13 @@ export const GlobalProvider = ({ children }) => {
 
   return (
     <GlobalContext.Provider
-      value={{ assetPrefix, online, requestUrls, userInfo, setUserInfo }}
+      value={{
+        assetPrefix,
+        online,
+        requestUrls,
+        userInfo,
+        setUserInfo,
+      }}
     >
       {children}
     </GlobalContext.Provider>

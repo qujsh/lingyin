@@ -144,9 +144,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    console.log(state, "isOpen");
-    console.log(process.env.DOMAIN, process.env.DOMAIN + "/api/wxweb/callback");
-
     if (isOpen) {
       loadScript(
         "https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"
@@ -157,7 +154,7 @@ export default function App() {
             appid: "wxe0e6ad32a9a8bd02",
             scope: "snsapi_login",
             redirect_uri: encodeURIComponent(
-              "https://" + process.env.DOMAIN + "/api/wxweb/callback"
+              process.env.DOMAIN + "/api/wxweb/callback"
             ),
             state: state,
             style: "black",
@@ -185,30 +182,33 @@ export default function App() {
           />
         </div>
 
-        <Button
-          onPress={onOpen}
-          className="translate-y-10 w-1/6 rounded-full bt-color "
-        >
-          微信登录
-        </Button>
+        {!userInfo && (
+          <Button
+            onPress={onOpen}
+            className="translate-y-10 w-1/6 rounded-full bt-color "
+          >
+            微信登录
+          </Button>
+        )}
 
-        <Button
-          onPress={(e) => connectWs(e)}
-          {...(online ? { isDisabled: true } : {})}
-          className="translate-y-10 w-1/6 rounded-full bt-color "
-        >
-          连接服务
-        </Button>
+        {userInfo && !connected && (
+          <Button
+            onPress={(e) => connectWs(e)}
+            {...(online ? { isDisabled: true } : {})}
+            className="translate-y-10 w-1/6 rounded-full bt-color "
+          >
+            连接服务
+          </Button>
+        )}
 
-        {/* {connected && ( */}
-        <Button
-          onPress={sendMessage}
-          isDisabled
-          className="translate-y-10 w-1/6 rounded-full bt-color mt-4"
-        >
-          发送消息
-        </Button>
-        {/* )} */}
+        {connected && (
+          <Button
+            onPress={sendMessage}
+            className="translate-y-10 w-1/6 rounded-full bt-color mt-4"
+          >
+            断开连接
+          </Button>
+        )}
       </div>
 
       <Modal

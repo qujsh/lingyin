@@ -1,7 +1,7 @@
 import * as CryptoJS from "crypto-js";
 
 // 密钥必须是 16 字节（128位 AES）
-const SECRET_KEY = process.env.DOMAIN;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 // 加密函数
 export function encrypt(text) {
