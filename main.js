@@ -1,6 +1,7 @@
 const { app, BrowserWindow, screen, ipcMain, clipboard } = require("electron");
 const { exec } = require("child_process");
 const path = require("path");
+const { autoUpdater } = require("electron-updater");
 
 let win;
 
@@ -92,6 +93,38 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
+  });
+
+  //todo 自动更新，待测试
+  autoUpdater.checkForUpdatesAndNotify();
+
+  autoUpdater.on("update-available", () => {
+    dialog
+      .showMessageBox({
+        type: "info",
+        title: "发现新版本",
+        message: "有新的版本可以下载，是否现在下载？",
+        buttons: ["下载", "稍后"],
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          autoUpdater.downloadUpdate();
+        }
+      });
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    dialog
+      .showMessageBox({
+        title: "更新准备安装",
+        message: "更新已下载完毕，是否现在安装？",
+        buttons: ["立即安装", "稍后安装"],
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          autoUpdater.quitAndInstall();
+        }
+      });
   });
 });
 
