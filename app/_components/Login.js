@@ -31,19 +31,26 @@ export default function App() {
   const [connected, setConnected] = useState(false);
 
   function connectWs(event) {
-    console.log(event);
-
     if (connected) {
-      alert("已经连接");
       return;
     }
 
-    const socket = new SockJS(requestUrls.ws); // 服务器 WebSocket 地址
     const client = new Client({
-      webSocketFactory: () => socket,
-      debug: (str) => console.log(str),
+      webSocketFactory: () =>
+        // 服务器 WebSocket 地址
+        new SockJS(requestUrls.ws + "?t=" + new Date().getTime()),
+      debug: (str) => {
+        if (!online) {
+          console.log("debug", str);
+        }
+      },
+
+      // ✅ 自动重连设置
+      reconnectDelay: 5000, // 断线后每 5 秒尝试重连一次
+      heartbeatIncoming: 0, // 服务端不发心跳
+      heartbeatOutgoing: 10000, //客户端每 10 秒发一次心跳
+
       onConnect: () => {
-        console.log("Connected to WebSocket");
         setConnected(true);
 
         // 发送用户加入信息
@@ -68,31 +75,45 @@ export default function App() {
       onStompError: (frame) => {
         console.error("STOMP Error:", frame);
       },
+      onWebSocketClose: (event) => {
+        console.warn("WebSocket closed:", event);
+        // 断开连接，等待重连
+        setConnected(false);
+      },
     });
 
     client.activate();
     setStompClient(client);
   }
 
-  // 发送消息
-  function sendMessage() {
-    if (stompClient && stompClient.connected) {
-      const chatMessage = {
-        sender: username,
-        content: "Hello from Next.js!",
-        type: "CHAT",
-      };
-
-      stompClient.publish({
-        destination: "/app/chat.sendMessage",
-        body: JSON.stringify(chatMessage),
-      });
-
-      console.log("📤 消息已发送:", chatMessage);
-    } else {
-      console.error("❌ WebSocket 未连接");
+  function disconnectWs() {
+    if (stompClient && stompClient.active) {
+      // 主动断开连接，禁止重连
+      stompClient.deactivate();
+      setStompClient(null);
+      setConnected(false);
     }
   }
+
+  // 发送消息 todo
+  // function sendMessage() {
+  //   if (stompClient && stompClient.connected) {
+  //     const chatMessage = {
+  //       sender: username,
+  //       content: "Hello from Next.js!",
+  //       type: "CHAT",
+  //     };
+
+  //     stompClient.publish({
+  //       destination: "/app/chat.sendMessage",
+  //       body: JSON.stringify(chatMessage),
+  //     });
+
+  //     console.log("📤 消息已发送:", chatMessage);
+  //   } else {
+  //     console.error("❌ WebSocket 未连接");
+  //   }
+  // }
 
   //微信登录二维码
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -203,7 +224,7 @@ export default function App() {
 
         {connected && (
           <Button
-            onPress={sendMessage}
+            onPress={disconnectWs}
             className="translate-y-10 w-1/6 rounded-full bt-color mt-4"
           >
             断开连接
