@@ -53,6 +53,13 @@ export default function App() {
       onConnect: () => {
         setConnected(true);
 
+        // 确保 window.electron 存在，并调用 simulateInit，用来开启系统的操作权限
+        if (window.electron) {
+          window.electron.simulateInit();
+        } else {
+          console.error("electron object is not available");
+        }
+
         // 发送用户加入信息
         client.publish({
           destination: "/app/chat.addUser",

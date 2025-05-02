@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>凌音助手权限设置指南</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* 去掉整个页面的滚动条 */
+        background-color: #f2f2f5; /* 整页灰度背景 */
+        font-family: -apple-system, system-ui, sans-serif;
+        color: #333;
+      }
+
+      .container {
+        /* 卡片固定尺寸并居中 */
+        width: 500px;
+        height: 480px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        padding: 32px;
+        box-sizing: border-box;
+
+        /* 默认子元素水平居中（针对标题和底部链接） */
+        text-align: center;
+        overflow: hidden; /* 隐藏多余内容 */
+      }
+
+      /* 标题居中、大一些 */
+      .container h1 {
+        margin: 16px 0 24px 0;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+
+      /* 重置 ol，去掉自带缩进和号码 */
+      .container ol {
+        list-style: none;
+        padding: 0;
+        /* margin: 0 0 24px; */
+      }
+
+      /* 每个步骤块之间留白 */
+      .container li {
+        margin: 32px 0;
+      }
+
+      /* 说明文字独占一行，左对齐 */
+      .container .item-text {
+        display: block;
+        font-size: 16px;
+        color: #555;
+        line-height: 1.6;
+        text-align: center; /* ← 改成居中 */
+        padding: 0 54px;
+        /* margin-bottom: 8px;  */
+        /* margin-top: 8px; */
+      }
+
+      /* 将按钮放到说明文字下面并水平居中 */
+      .container .action-button {
+        display: inline-block;
+        margin-top: 16px;
+        background: #007aff;
+        color: #fff;
+        padding: 4px 32px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background 0.2s;
+      }
+      .container .action-button:hover {
+        background: #005bb5;
+      }
+
+      /* 图标放到说明文字下面并水平居中 */
+      .container .bob-icon {
+        width: 80px;
+        height: 80px;
+        background: #ddd;
+        border-radius: 16px;
+        margin: 18px auto;
+      }
+
+      /* 底部帮助链接保持居中 */
+      .container .help-links {
+        font-size: 13px;
+      }
+      .container .help-links a {
+        color: #007aff;
+        text-decoration: none;
+        margin: 0 8px;
+      }
+      .container .help-links a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>灵音助手跨应用输出文本需要辅助功能权限</h1>
+      <ol>
+        <li>
+          <span class="item-text">1. 点击下方按钮打开系统设置</span>
+          <a href="#" class="action-button" onclick="openSettings()"
+            >打开系统设置</a
+          >
+        </li>
+        <li>
+          <span class="item-text" style="font-size: 15px">
+            2. 将下方 ”凌音助手“ 图标
+            <span style="color: #ff3b30">拖拽</span>
+            到系统设置右侧「允许下面的应用程序控制你的电脑。」列表中
+          </span>
+          <!-- <div class="bob-icon"></div> -->
+          <img
+            id="drag-icon"
+            class="bob-icon"
+            src="https://lingyin.tos-cn-shanghai.volces.com/public/favicon.ico"
+            draggable="true"
+          />
+        </li>
+      </ol>
+
+      <!-- <div class="help-links">
+        <a href="#">查看解决方案</a> |
+        <a href="#">联系我们</a>
+      </div> -->
+    </div>
+  </body>
+  <script>
+    const { ipcRenderer } = require("electron");
+
+    function openSettings() {
+      ipcRenderer.send("open-settings");
+    }
+    document.getElementById("drag-icon").addEventListener("dragstart", (e) => {
+      ipcRenderer.send("drag-start");
+    });
+  </script>
+</html>

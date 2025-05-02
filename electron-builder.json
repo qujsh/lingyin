@@ -1,19 +1,42 @@
 {
-  "appId": "cn.qujsh",
+  "appId": "cn.nextvoice",
+  "productName": "凌音助手",
+  "asar": true,
   "mac": {
-    "category": "public.app-category.utilities",
+    "icon": "assets/icon.icns",
     "target": [
       {
-        "target": "dmg",
-        "arch": ["x64", "arm64"]
+        "target": "default",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
       }
-    ],
-    "executableName": "凌音助手"
+    ]
   },
-  "extraFiles": [
+  "extraResources": [
+    "./assets/**"
+  ],
+  "dmg": {
+    "contents": [
+      {
+        "x": 130,
+        "y": 220,
+        "type": "file"
+      },
+      {
+        "x": 410,
+        "y": 220,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ]
+  },
+  "publish": [
     {
-      "from": "out",
-      "to": "Resources/out"
+      "provider": "github",
+      "owner": "qujsh",
+      "repo": "lingyin"
     }
   ]
 }

@@ -1,20 +1,9 @@
 {
   "name": "lingyin",
-  "version": "0.1.16",
+  "version": "0.1.21",
   "author": "qujsh",
   "private": true,
   "main": "main.js",
-  "build": {
-    "appId": "cn.nextvoice",
-    "productName": "lingyin",
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "qujsh",
-        "repo": "https://github.com/qujsh/lingyin"
-      }
-    ]
-  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -23,6 +12,7 @@
     "cdn:build": "export ELT_ENV=package && next build",
     "cdn:start": "export ELT_ENV=package && next start",
     "electron": "concurrently \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-builder": "electron-builder",
     "electron:builder": "export ELT_ENV=package && next build && electron-builder"
   },
   "dependencies": {

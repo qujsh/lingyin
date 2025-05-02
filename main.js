@@ -1,18 +1,54 @@
-const { app, BrowserWindow, screen, ipcMain, clipboard } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  screen,
+  ipcMain,
+  clipboard,
+  dialog,
+  shell,
+  nativeImage,
+} = require("electron");
 const { exec } = require("child_process");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
+const fs = require("fs");
 
 let win;
+let dialogWindow;
+let getAssetPath;
 
 function createWindow() {
   // 获取主屏幕的工作区域大小
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
+  // // 在开发模式下加载图标
+  //todo remove
+  // const iconPath = path.join(__dirname, "public", "lingyin.icns");
+  // const appIcon = nativeImage.createFromPath(iconPath);
+
+  const RESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, "assets")
+    : path.join(__dirname, "assets");
+
+  console.log(path.join(process.resourcesPath, "assets"));
+  console.log(path.join(__dirname, "assets"));
+
+  getAssetPath = (...paths) => {
+    return path.join(RESOURCES_PATH, ...paths);
+  };
+
+  const iconPath = getAssetPath("icon.icns");
+  if (!fs.existsSync(iconPath)) {
+    console.error(`Icon file does not exist at path: ${iconPath}`);
+  } else {
+    console.log(`Icon file exists: ${iconPath}`);
+  }
+
   // 创建浏览器窗口
   win = new BrowserWindow({
     width: width, // 设置窗口宽度为屏幕宽度
     height: height, // 设置窗口高度为屏幕高度
+    icon: getAssetPath("icon.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"), // 设置 preload 文件
       nodeIntegration: false, // 允许在渲染进程中使用 Node.js API
@@ -24,7 +60,7 @@ function createWindow() {
 
   // 这是 Next.js 开发服务器的默认端口
   let webUrl = "http://localhost:3000";
-  if (app.isPackaged) {
+  if (app.isPackaged && process.env.ELT_ENV === "package") {
     webUrl = "https://nextvoice.cn";
   }
 
@@ -46,6 +82,90 @@ function createWindow() {
     win.webContents.openDevTools();
   }
 }
+
+// 监听从渲染进程发送的 "simulateInit" 消息
+ipcMain.on("simulate-init", (event) => {
+  console.log("do simulate-init");
+
+  // **1. 模拟 Ctrl+C，判定是否有操作权限 **
+  if (process.platform === "darwin") {
+    // **macOS（Command + C）**
+    exec(
+      'osascript -e "tell application \\"System Events\\"" ' +
+        '-e "keystroke \\"c\\" using command down" ' + // ⌘+c
+        '-e "end tell"',
+      (error) => {
+        if (dialogWindow) return;
+
+        // 获取父窗口的位置和大小
+        const parentBounds = win.getBounds();
+
+        // 设置窗口位置的百分比
+        const percentX = 0.7; // 70% 屏幕宽度
+        const percentY = 0.25; // 25% 屏幕高度
+        const windowX = parentBounds.x + parentBounds.width * percentX;
+        const windowY = parentBounds.y + parentBounds.height * percentY; // 计算屏幕高度的 25% 位置
+
+        dialogWindow = new BrowserWindow({
+          width: 500,
+          height: 480,
+          minimizable: false,
+          maximizable: false,
+          closable: true,
+          alwaysOnTop: true,
+          frame: true, // ✅ 改为 true，显示原生系统标题栏
+          movable: true, // ✅ 窗口允许拖动（可选，默认就是 true）
+          modal: false,
+          parent: null,
+          resizable: false,
+          x: windowX, // 设置弹出窗口的 x 位置
+          y: windowY, // 设置弹出窗口的 y 位置
+          webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+          },
+        });
+
+        dialogWindow.loadFile(getAssetPath("dialog-mac.html"));
+        // dialogWindow.loadURL("data:text/html,<h1>Hello</h1>");
+
+        dialogWindow.on("closed", () => {
+          dialogWindow = null;
+        });
+
+        //在这个地方可以捕获到
+        // Error executing osascript: Error: Command failed: osascript -e "tell application \"System Events\"" -e "keystroke \"v\" using command down" -e "delay 0.05" -e "key code 36" -e "end tell"
+        //[1] 33:65: execution error: “System Events”遇到一个错误：“osascript”不允许发送按键。 (1002)
+        if (error) console.error("Error executing osascript:", error);
+      }
+    );
+  } else if (process.platform === "win32") {
+    // **Windows（Ctrl + C）**
+    exec(
+      'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
+        "$wshell.SendKeys('^c'); ", // Ctrl + C
+      (error) => {
+        if (error) console.error("Error executing PowerShell:", error);
+      }
+    );
+  }
+});
+
+ipcMain.on("open-settings", () => {
+  shell.openExternal(
+    "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
+  );
+});
+
+ipcMain.on("drag-start", (event) => {
+  //todo icns 文件有问题，待区分不同平台
+  const win = BrowserWindow.fromWebContents(event.sender);
+  win.webContents.startDrag({
+    file: "/Applications/凌音助手.app",
+    icon: getAssetPath("icon.png"),
+    // icon: "/Users/mainto/frontfile/lingyin/assets/icon.png",
+  });
+});
 
 // 监听从渲染进程发送的 "simulatePaste" 消息
 ipcMain.on("simulate-paste", (event, text) => {
@@ -74,6 +194,7 @@ ipcMain.on("simulate-paste", (event, text) => {
     );
   } else if (process.platform === "win32") {
     // **Windows（Ctrl + V + Enter）**
+    // todo
     exec(
       'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
         "$wshell.SendKeys('^v'); " + // Ctrl + V
