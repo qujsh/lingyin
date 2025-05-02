@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electron", {
   simulateInit: () => ipcRenderer.send("simulate-init"),
+  simulateClose: () => ipcRenderer.send("simulate-close"),
   simulatePaste: (text) => ipcRenderer.send("simulate-paste", text),
 });
 

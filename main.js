@@ -97,14 +97,17 @@ ipcMain.on("simulate-init", (event) => {
       (error) => {
         if (dialogWindow) return;
 
-        // 获取父窗口的位置和大小
-        const parentBounds = win.getBounds();
+        //获取当前窗口参数
+        const currentWindow = BrowserWindow.getFocusedWindow();
+        const currentDisplay = screen.getDisplayNearestPoint(
+          currentWindow.getBounds()
+        );
+
+        const { x, y, width, height } = currentDisplay.workArea;
 
         // 设置窗口位置的百分比
-        const percentX = 0.7; // 70% 屏幕宽度
-        const percentY = 0.25; // 25% 屏幕高度
-        const windowX = parentBounds.x + parentBounds.width * percentX;
-        const windowY = parentBounds.y + parentBounds.height * percentY; // 计算屏幕高度的 25% 位置
+        const windowX = x + Math.floor(width * 0.7); // 70% 屏幕宽度
+        const windowY = y + Math.floor(height * 0.25); // 25% 屏幕高度
 
         dialogWindow = new BrowserWindow({
           width: 500,
@@ -112,7 +115,7 @@ ipcMain.on("simulate-init", (event) => {
           minimizable: false,
           maximizable: false,
           closable: true,
-          alwaysOnTop: true,
+          alwaysOnTop: false,
           frame: true, // ✅ 改为 true，显示原生系统标题栏
           movable: true, // ✅ 窗口允许拖动（可选，默认就是 true）
           modal: false,
@@ -136,7 +139,7 @@ ipcMain.on("simulate-init", (event) => {
         //在这个地方可以捕获到
         // Error executing osascript: Error: Command failed: osascript -e "tell application \"System Events\"" -e "keystroke \"v\" using command down" -e "delay 0.05" -e "key code 36" -e "end tell"
         //[1] 33:65: execution error: “System Events”遇到一个错误：“osascript”不允许发送按键。 (1002)
-        if (error) console.error("Error executing osascript:", error);
+        // if (error) console.error("Error executing osascript:", error);
       }
     );
   } else if (process.platform === "win32") {
@@ -151,6 +154,14 @@ ipcMain.on("simulate-init", (event) => {
   }
 });
 
+// 监听从渲染进程发送的 "simulateClose" 消息
+ipcMain.on("simulate-close", () => {
+  //把网页关闭
+  if (dialogWindow) {
+    dialogWindow.close();
+  }
+});
+
 ipcMain.on("open-settings", () => {
   shell.openExternal(
     "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
@@ -162,8 +173,7 @@ ipcMain.on("drag-start", (event) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   win.webContents.startDrag({
     file: "/Applications/凌音助手.app",
-    icon: getAssetPath("icon.png"),
-    // icon: "/Users/mainto/frontfile/lingyin/assets/icon.png",
+    icon: getAssetPath("icons/128x128.png"),
   });
 });
 

@@ -100,6 +100,13 @@ export default function App() {
       setStompClient(null);
       setConnected(false);
     }
+
+    // 确保 window.electron 存在，并调用 simulateInit，用来开启系统的操作权限
+    if (window.electron) {
+      window.electron.simulateClose();
+    } else {
+      console.error("electron object is not available");
+    }
   }
 
   // 发送消息 todo
