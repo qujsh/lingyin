@@ -83,76 +83,99 @@ function createWindow() {
   }
 }
 
+function simulateInit(Event) {
+  const isBoolean = typeof Event === "boolean";
+  const check = isBoolean ? Event : false;
+
+  return new Promise((resolve) => {
+    console.log("do simulate-init");
+
+    // **1. 模拟 Ctrl+C，判定是否有操作权限 **
+    if (process.platform === "darwin") {
+      // **macOS（Command + C）**
+      exec(
+        'osascript -e "tell application \\"System Events\\"" ' +
+          '-e "keystroke \\"c\\" using command down" ' + // ⌘+c
+          '-e "end tell"',
+        (error) => {
+          if (error) {
+            if (dialogWindow) {
+              return;
+            }
+
+            //如果是权限检查
+            if (check) {
+              resolve(false);
+              return;
+            }
+
+            //获取当前窗口参数
+            const currentWindow = BrowserWindow.getFocusedWindow();
+            const currentDisplay = screen.getDisplayNearestPoint(
+              currentWindow.getBounds()
+            );
+
+            const { x, y, width, height } = currentDisplay.workArea;
+
+            // 设置窗口位置的百分比
+            const windowX = x + Math.floor(width * 0.7); // 70% 屏幕宽度
+            const windowY = y + Math.floor(height * 0.25); // 25% 屏幕高度
+
+            dialogWindow = new BrowserWindow({
+              width: 500,
+              height: 480,
+              minimizable: false,
+              maximizable: false,
+              closable: true,
+              alwaysOnTop: false,
+              frame: true, // ✅ 改为 true，显示原生系统标题栏
+              movable: true, // ✅ 窗口允许拖动（可选，默认就是 true）
+              modal: false,
+              parent: null,
+              resizable: false,
+              x: windowX, // 设置弹出窗口的 x 位置
+              y: windowY, // 设置弹出窗口的 y 位置
+              webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false,
+              },
+            });
+
+            dialogWindow.loadFile(getAssetPath("dialog-mac.html"));
+            // dialogWindow.loadURL("data:text/html,<h1>Hello</h1>");
+
+            dialogWindow.on("closed", () => {
+              dialogWindow = null;
+            });
+
+            //在这个地方可以捕获到
+            // Error executing osascript: Error: Command failed: osascript -e "tell application \"System Events\"" -e "keystroke \"v\" using command down" -e "delay 0.05" -e "key code 36" -e "end tell"
+            //[1] 33:65: execution error: “System Events”遇到一个错误：“osascript”不允许发送按键。 (1002)
+            // if (error) console.error("Error executing osascript:", error);
+
+            return;
+          }
+
+          resolve(true);
+        }
+      );
+    } else if (process.platform === "win32") {
+      // **Windows（Ctrl + C）**
+      exec(
+        'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
+          "$wshell.SendKeys('^c'); ", // Ctrl + C
+        (error) => {
+          if (error) console.error("Error executing PowerShell:", error);
+
+          resolve(false);
+        }
+      );
+    }
+  });
+}
+
 // 监听从渲染进程发送的 "simulateInit" 消息
-ipcMain.on("simulate-init", (event) => {
-  console.log("do simulate-init");
-
-  // **1. 模拟 Ctrl+C，判定是否有操作权限 **
-  if (process.platform === "darwin") {
-    // **macOS（Command + C）**
-    exec(
-      'osascript -e "tell application \\"System Events\\"" ' +
-        '-e "keystroke \\"c\\" using command down" ' + // ⌘+c
-        '-e "end tell"',
-      (error) => {
-        if (dialogWindow) return;
-
-        //获取当前窗口参数
-        const currentWindow = BrowserWindow.getFocusedWindow();
-        const currentDisplay = screen.getDisplayNearestPoint(
-          currentWindow.getBounds()
-        );
-
-        const { x, y, width, height } = currentDisplay.workArea;
-
-        // 设置窗口位置的百分比
-        const windowX = x + Math.floor(width * 0.7); // 70% 屏幕宽度
-        const windowY = y + Math.floor(height * 0.25); // 25% 屏幕高度
-
-        dialogWindow = new BrowserWindow({
-          width: 500,
-          height: 480,
-          minimizable: false,
-          maximizable: false,
-          closable: true,
-          alwaysOnTop: false,
-          frame: true, // ✅ 改为 true，显示原生系统标题栏
-          movable: true, // ✅ 窗口允许拖动（可选，默认就是 true）
-          modal: false,
-          parent: null,
-          resizable: false,
-          x: windowX, // 设置弹出窗口的 x 位置
-          y: windowY, // 设置弹出窗口的 y 位置
-          webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-          },
-        });
-
-        dialogWindow.loadFile(getAssetPath("dialog-mac.html"));
-        // dialogWindow.loadURL("data:text/html,<h1>Hello</h1>");
-
-        dialogWindow.on("closed", () => {
-          dialogWindow = null;
-        });
-
-        //在这个地方可以捕获到
-        // Error executing osascript: Error: Command failed: osascript -e "tell application \"System Events\"" -e "keystroke \"v\" using command down" -e "delay 0.05" -e "key code 36" -e "end tell"
-        //[1] 33:65: execution error: “System Events”遇到一个错误：“osascript”不允许发送按键。 (1002)
-        // if (error) console.error("Error executing osascript:", error);
-      }
-    );
-  } else if (process.platform === "win32") {
-    // **Windows（Ctrl + C）**
-    exec(
-      'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
-        "$wshell.SendKeys('^c'); ", // Ctrl + C
-      (error) => {
-        if (error) console.error("Error executing PowerShell:", error);
-      }
-    );
-  }
-});
+ipcMain.on("simulate-init", simulateInit);
 
 // 监听从渲染进程发送的 "simulateClose" 消息
 ipcMain.on("simulate-close", () => {
@@ -160,6 +183,12 @@ ipcMain.on("simulate-close", () => {
   if (dialogWindow) {
     dialogWindow.close();
   }
+});
+
+// 检查连接是否创建成功
+ipcMain.handle("simulate-check", async () => {
+  //做权限检查使用
+  return await simulateInit(true);
 });
 
 ipcMain.on("open-settings", () => {

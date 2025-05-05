@@ -68,7 +68,7 @@ export default function App() {
       </NavbarBrand>
 
       <NavbarContent as="div" justify="end" className="flex justify-end ">
-        {connected && (
+        {!connected && (
           <Chip
             color="default"
             size="sm"
@@ -80,15 +80,17 @@ export default function App() {
           </Chip>
         )}
 
-        <Chip
-          color="success"
-          size="sm"
-          radius="lg"
-          variant="dot"
-          className="bt-color "
-        >
-          已连接
-        </Chip>
+        {connected && (
+          <Chip
+            color="success"
+            size="sm"
+            radius="lg"
+            variant="dot"
+            className="bt-color "
+          >
+            已连接
+          </Chip>
+        )}
 
         <Dropdown placement="bottom-end">
           <DropdownTrigger>

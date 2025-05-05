@@ -98,13 +98,18 @@ export default function App() {
     setStompClient(client);
   }
 
-  function disconnectWs() {
+  function disconnectWs(Event) {
+    const isBoolean = typeof Event === "boolean";
+    const check = isBoolean ? Event : false;
+
     if (stompClient && stompClient.active) {
       // 主动断开连接，禁止重连
       stompClient.deactivate();
       setStompClient(null);
       setConnected(false);
     }
+
+    if (check) return;
 
     // 确保 window.electron 存在，并调用 simulateInit，用来开启系统的操作权限
     if (window.electron) {
@@ -113,6 +118,24 @@ export default function App() {
       console.error("electron object is not available");
     }
   }
+
+  useEffect(() => {
+    if (window.electron) {
+      const interval = setInterval(async () => {
+        const res = await window.electron.simulateCheck();
+
+        //true 关闭定时，false 断开连接，undefined 啥也不干
+        if (res) {
+          clearInterval(interval);
+        } else if (res === false) {
+          disconnectWs(true);
+        }
+      }, 3000); // 每 30 秒调用一次
+      return () => clearInterval(interval);
+    } else {
+      console.error("electron object is not available");
+    }
+  }, [stompClient]);
 
   // 发送消息 todo
   // function sendMessage() {
