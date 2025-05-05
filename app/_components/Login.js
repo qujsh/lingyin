@@ -9,7 +9,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   useDisclosure,
   useDraggable,
 } from "@heroui/react";
@@ -23,12 +22,18 @@ import { wxwebUserInfo } from "@/app/_models/user/userInfo";
 
 /* svg 来源： https://undraw.co/search/computer */
 export default function App() {
-  const { assetPrefix, online, requestUrls, userInfo, setUserInfo } =
-    useGlobalContext(); // 获取全局的 assetPrefix
+  const {
+    assetPrefix,
+    online,
+    requestUrls,
+    userInfo,
+    setUserInfo,
+    connected,
+    setConnected,
+  } = useGlobalContext(); // 获取全局的 assetPrefix
 
   const [username, setUsername] = useState("");
   const [stompClient, setStompClient] = useState(null);
-  const [connected, setConnected] = useState(false);
 
   function connectWs(event) {
     if (connected) {

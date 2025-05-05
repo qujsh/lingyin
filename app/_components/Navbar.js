@@ -20,8 +20,14 @@ import "../styles/navbar.css";
 import request from "../_lib/request";
 
 export default function App() {
-  const { assetPrefix, requestUrls, userInfo, setUserInfo, setWxLoginState } =
-    useGlobalContext(); // 获取全局的 assetPrefix
+  const {
+    assetPrefix,
+    requestUrls,
+    userInfo,
+    setUserInfo,
+    setWxLoginState,
+    connected,
+  } = useGlobalContext(); // 获取全局的 assetPrefix
 
   const handleLogout = () => {
     const wxLoginState = localStorage.getItem("wx_login_state");
@@ -62,15 +68,17 @@ export default function App() {
       </NavbarBrand>
 
       <NavbarContent as="div" justify="end" className="flex justify-end ">
-        <Chip
-          color="default"
-          size="sm"
-          radius="lg"
-          variant="dot"
-          className="bt-color "
-        >
-          未连接
-        </Chip>
+        {connected && (
+          <Chip
+            color="default"
+            size="sm"
+            radius="lg"
+            variant="dot"
+            className="bt-color "
+          >
+            未连接
+          </Chip>
+        )}
 
         <Chip
           color="success"

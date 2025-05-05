@@ -12,6 +12,7 @@ export const GlobalProvider = ({ children }) => {
   const [online, setOnline] = useState(lingyinConfig.online);
   const [requestUrls, setRequestUrls] = useState(lingyinConfig.requestUrls);
   const [userInfo, setUserInfo] = useState(null);
+  const [connected, setConnected] = useState(false);
 
   return (
     <GlobalContext.Provider
@@ -21,6 +22,8 @@ export const GlobalProvider = ({ children }) => {
         requestUrls,
         userInfo,
         setUserInfo,
+        connected,
+        setConnected,
       }}
     >
       {children}

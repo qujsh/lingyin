@@ -227,6 +227,13 @@ app.whenReady().then(() => {
   });
 
   //todo 自动更新，待测试
+  // "publish": [
+  //   {
+  //     "provider": "github",
+  //     "owner": "qujsh",
+  //     "repo": "lingyin"
+  //   }
+  // ]
   autoUpdater.checkForUpdatesAndNotify();
 
   autoUpdater.on("update-available", () => {
