@@ -120,6 +120,8 @@ export default function App() {
   }
 
   useEffect(() => {
+    if (!connected) return;
+
     if (window.electron) {
       const interval = setInterval(async () => {
         const res = await window.electron.simulateCheck();
@@ -135,7 +137,7 @@ export default function App() {
     } else {
       console.error("electron object is not available");
     }
-  }, [stompClient]);
+  }, [stompClient, connected]);
 
   // 发送消息 todo
   // function sendMessage() {
