@@ -58,8 +58,6 @@ function createWindow() {
     },
   });
 
-  console.log("test", process.env.ELT_ENV)
-
   // 这是 Next.js 开发服务器的默认端口
   let webUrl = "http://localhost:3000";
   if (app.isPackaged && process.env.ELT_ENV === "package") {
@@ -144,7 +142,6 @@ function simulateInit(Event) {
             });
 
             dialogWindow.loadFile(getAssetPath("dialog-mac.html"));
-            // dialogWindow.loadURL("data:text/html,<h1>Hello</h1>");
 
             dialogWindow.on("closed", () => {
               dialogWindow = null;
@@ -163,7 +160,7 @@ function simulateInit(Event) {
       );
     } else if (process.platform === "win32") {
       // **Windows（Ctrl + C）**
-      // 没有权限拦截，所以不用校验
+      // 没有权限拦截，暂不用校验
       exec(
         'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
           "$wshell.SendKeys('^c'); ", // Ctrl + C
@@ -215,9 +212,6 @@ ipcMain.on("simulate-paste", (event, text) => {
 
   // **1. 先将文本写入剪贴板**
   clipboard.writeText(text);
-  console.log("Text written to clipboard:", clipboard.readText());
-
-  console.log(process.platform)
 
   // **2. 模拟 Ctrl+V + Enter**
   if (process.platform === "darwin") {
@@ -238,7 +232,6 @@ ipcMain.on("simulate-paste", (event, text) => {
     );
   } else if (process.platform === "win32") {
     // **Windows（Ctrl + V + Enter）**
-    // todo
     exec(
       'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
         "$wshell.SendKeys('^v'); " + // Ctrl + V
