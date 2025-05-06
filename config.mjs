@@ -3,16 +3,19 @@ const CDN_URL = "https://lingyin.tos-cn-shanghai.volces.com";
 const DEV_URL = "";
 let assetPrefix = DEV_URL;
 let online = false;
-if (process.env.ELT_ENV === "package") {
-  assetPrefix = CDN_URL + "/public";
-  online = true;
-}
+//todo 
+// if (process.env.ELT_ENV === "package") {
+//   assetPrefix = CDN_URL + "/public";
+//   online = true;
+// }
 
 //还涉及到 ase的16位程度加密
 const SECRET_KEY = "www.nextvoice.cn";
 
 const DOMAIN = "https://nextvoice.cn";
 let localDomain = "http://localhost:8080";
+//todo
+ localDomain = "https://mainto.run.hzmantu.com";
 if (process.env.ELT_ENV === "package") {
   localDomain = DOMAIN + "/api";
 }

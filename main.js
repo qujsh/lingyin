@@ -58,6 +58,8 @@ function createWindow() {
     },
   });
 
+  console.log("test", process.env.ELT_ENV)
+
   // 这是 Next.js 开发服务器的默认端口
   let webUrl = "http://localhost:3000";
   if (app.isPackaged && process.env.ELT_ENV === "package") {
@@ -161,6 +163,7 @@ function simulateInit(Event) {
       );
     } else if (process.platform === "win32") {
       // **Windows（Ctrl + C）**
+      // 没有权限拦截，所以不用校验
       exec(
         'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
           "$wshell.SendKeys('^c'); ", // Ctrl + C
@@ -214,6 +217,8 @@ ipcMain.on("simulate-paste", (event, text) => {
   clipboard.writeText(text);
   console.log("Text written to clipboard:", clipboard.readText());
 
+  console.log(process.platform)
+
   // **2. 模拟 Ctrl+V + Enter**
   if (process.platform === "darwin") {
     // **macOS（Command + V + Enter）**
@@ -237,7 +242,7 @@ ipcMain.on("simulate-paste", (event, text) => {
     exec(
       'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
         "$wshell.SendKeys('^v'); " + // Ctrl + V
-        "Start-Sleep -Milliseconds 200; " + // 等待 0.2 秒
+        "Start-Sleep -Milliseconds 50; " + // 等待 0.05 秒
         "$wshell.SendKeys('{ENTER}')\"", // 回车
       (error) => {
         if (error) console.error("Error executing PowerShell:", error);

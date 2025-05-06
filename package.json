@@ -12,6 +12,8 @@
     "cdn:build": "export ELT_ENV=package && next build",
     "cdn:start": "export ELT_ENV=package && next start",
     "electron": "concurrently \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron:on": "export ELT_ENV=package && concurrently \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron:win": "set ELT_ENV=package&& concurrently \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
     "electron-builder": "electron-builder",
     "electron:builder": "export ELT_ENV=package && next build && electron-builder"
   },

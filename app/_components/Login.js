@@ -119,25 +119,26 @@ export default function App() {
     }
   }
 
-  useEffect(() => {
-    if (!connected) return;
+  //todo 
+  // useEffect(() => {
+  //   if (!connected) return;
 
-    if (window.electron) {
-      const interval = setInterval(async () => {
-        const res = await window.electron.simulateCheck();
+  //   if (window.electron) {
+  //     const interval = setInterval(async () => {
+  //       const res = await window.electron.simulateCheck();
 
-        //true 关闭定时，false 断开连接，undefined 啥也不干
-        if (res) {
-          clearInterval(interval);
-        } else if (res === false) {
-          disconnectWs(true);
-        }
-      }, 3000); // 每 30 秒调用一次
-      return () => clearInterval(interval);
-    } else {
-      console.error("electron object is not available");
-    }
-  }, [stompClient, connected]);
+  //       //true 关闭定时，false 断开连接，undefined 啥也不干
+  //       if (res) {
+  //         clearInterval(interval);
+  //       } else if (res === false) {
+  //         disconnectWs(true);
+  //       }
+  //     }, 3000); // 每 30 秒调用一次
+  //     return () => clearInterval(interval);
+  //   } else {
+  //     console.error("electron object is not available");
+  //   }
+  // }, [stompClient, connected]);
 
   // 发送消息 todo
   // function sendMessage() {
