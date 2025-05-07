@@ -19,7 +19,7 @@ import { useGlobalContext } from "@/app/_components/GlobalContext";
 import "../styles/navbar.css";
 import request from "../_lib/request";
 
-export default function App() {
+export default function App({ onLoginClick }) {
   const {
     assetPrefix,
     requestUrls,
@@ -68,7 +68,19 @@ export default function App() {
       </NavbarBrand>
 
       <NavbarContent as="div" justify="end" className="flex justify-end ">
-        {!connected && (
+        {!userInfo && (
+          <Chip
+            color="default"
+            size="sm"
+            radius="lg"
+            variant="dot"
+            className="bt-color "
+          >
+            未登录
+          </Chip>
+        )}
+
+        {userInfo && !connected && (
           <Chip
             color="default"
             size="sm"
@@ -80,7 +92,7 @@ export default function App() {
           </Chip>
         )}
 
-        {connected && (
+        {userInfo && connected && (
           <Chip
             color="success"
             size="sm"
@@ -104,32 +116,40 @@ export default function App() {
               src={
                 userInfo?.headimg || "https://cdn.auth0.com/avatars/default.png"
               }
+              onClick={() => {
+                if (!userInfo) {
+                  onLoginClick();
+                }
+              }}
             />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem
-              key="profile"
-              className="h-14"
-              textValue={`你好，${userInfo?.nickname ?? ""}`}
-            >
-              你好，{userInfo?.nickname}
-            </DropdownItem>
-            <DropdownItem
-              key="logout"
-              textValue="退出登录"
-              onClick={handleLogout}
-            >
-              <div className="flex items-center gap-x-2">
-                <Image
-                  src={`${assetPrefix}/logout.svg`}
-                  alt="Icon"
-                  width={25}
-                  height={25}
-                />
-                <span>退出登录</span>
-              </div>
-            </DropdownItem>
-          </DropdownMenu>
+
+          {userInfo && (
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem
+                key="profile"
+                className="h-14"
+                textValue={`你好，${userInfo?.nickname ?? ""}`}
+              >
+                你好，{userInfo?.nickname}
+              </DropdownItem>
+              <DropdownItem
+                key="logout"
+                textValue="退出登录"
+                onClick={handleLogout}
+              >
+                <div className="flex items-center gap-x-2">
+                  <Image
+                    src={`${assetPrefix}/logout.svg`}
+                    alt="Icon"
+                    width={25}
+                    height={25}
+                  />
+                  <span>退出登录</span>
+                </div>
+              </DropdownItem>
+            </DropdownMenu>
+          )}
         </Dropdown>
       </NavbarContent>
     </Navbar>

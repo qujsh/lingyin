@@ -21,17 +21,9 @@ function createWindow() {
   // 获取主屏幕的工作区域大小
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
-  // // 在开发模式下加载图标
-  //todo remove
-  // const iconPath = path.join(__dirname, "public", "lingyin.icns");
-  // const appIcon = nativeImage.createFromPath(iconPath);
-
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, "assets")
     : path.join(__dirname, "assets");
-
-  console.log(path.join(process.resourcesPath, "assets"));
-  console.log(path.join(__dirname, "assets"));
 
   getAssetPath = (...paths) => {
     return path.join(RESOURCES_PATH, ...paths);
@@ -198,7 +190,6 @@ ipcMain.on("open-settings", () => {
 });
 
 ipcMain.on("drag-start", (event) => {
-  //todo icns 文件有问题，待区分不同平台
   const win = BrowserWindow.fromWebContents(event.sender);
   win.webContents.startDrag({
     file: "/Applications/凌音助手.app",
@@ -220,7 +211,7 @@ ipcMain.on("simulate-paste", (event, text) => {
       'osascript -e "tell application \\"System Events\\"" ' +
         '-e "keystroke \\"v\\" using command down" ' + // ⌘+V
         // 加个是否要输出回车的控制，有些场景需要有些场景不需要，比如我就是用来进行办公的，要打很多字要手动介入控制
-        '-e "delay 0.05" ' + // 等待 0.05 秒
+        '-e "delay 0.1" ' + // 等待 0.1 秒
         '-e "key code 36" ' + // 按下 Enter（Return 键的 key code = 36）
         '-e "end tell"',
       (error) => {
@@ -235,7 +226,7 @@ ipcMain.on("simulate-paste", (event, text) => {
     exec(
       'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
         "$wshell.SendKeys('^v'); " + // Ctrl + V
-        "Start-Sleep -Milliseconds 50; " + // 等待 0.05 秒
+        "Start-Sleep -Milliseconds 100; " + // 等待 0.1 秒
         "$wshell.SendKeys('{ENTER}')\"", // 回车
       (error) => {
         if (error) console.error("Error executing PowerShell:", error);

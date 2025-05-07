@@ -64,7 +64,7 @@ export default function App() {
                           <span className="bg-[rgba(255,248,151)] ">
                             获取部分电脑权限
                           </span>
-                          。mac电脑权限控制在：“隐私与安全”-“辅助功能”；windows电脑暂未调试。
+                          。mac电脑权限控制在：“隐私与安全”-“辅助功能”；windows电脑可直接使用。
                         </span>
                       </li>
                       <li className="flex">
@@ -74,7 +74,7 @@ export default function App() {
                           <span className="bg-[rgba(255,248,151)] ">
                             联网使用
                           </span>
-                          ，所以请保证使用时有联网，体现效果为“连接服务”按钮可点击。
+                          ，所以请保证使用时有联网，体现效果为“连接服务”按钮可点击，并连接成功。
                         </span>
                       </li>
                       <li className="flex">
@@ -82,7 +82,7 @@ export default function App() {
                         <span>
                           因为是直接将文本输入到目标应用的指定位置，所以使用时请先打开目标应用，
                           <span className="bg-[rgba(255,248,151)] ">
-                            在目标应用可以输入文本的位置先点击一次
+                            在目标应用可以输入文本的位置先点击一下做选中
                           </span>
                           ，出现可输入的光标闪烁效果，后续会在当前位置插入文本。
                         </span>

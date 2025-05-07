@@ -21,7 +21,7 @@ import request from "@/app/_lib/request";
 import { wxwebUserInfo } from "@/app/_models/user/userInfo";
 
 /* svg 来源： https://undraw.co/search/computer */
-export default function App() {
+export default function App({ buttonRef }) {
   const {
     assetPrefix,
     online,
@@ -119,26 +119,25 @@ export default function App() {
     }
   }
 
-  //todo 
-  // useEffect(() => {
-  //   if (!connected) return;
+  useEffect(() => {
+    if (!connected) return;
 
-  //   if (window.electron) {
-  //     const interval = setInterval(async () => {
-  //       const res = await window.electron.simulateCheck();
+    if (window.electron) {
+      const interval = setInterval(async () => {
+        const res = await window.electron.simulateCheck();
 
-  //       //true 关闭定时，false 断开连接，undefined 啥也不干
-  //       if (res) {
-  //         clearInterval(interval);
-  //       } else if (res === false) {
-  //         disconnectWs(true);
-  //       }
-  //     }, 3000); // 每 30 秒调用一次
-  //     return () => clearInterval(interval);
-  //   } else {
-  //     console.error("electron object is not available");
-  //   }
-  // }, [stompClient, connected]);
+        //true 关闭定时，false 断开连接，undefined 啥也不干
+        if (res) {
+          clearInterval(interval);
+        } else if (res === false) {
+          disconnectWs(true);
+        }
+      }, 3000); // 每 30 秒调用一次
+      return () => clearInterval(interval);
+    } else {
+      console.error("electron object is not available");
+    }
+  }, [stompClient, connected]);
 
   // 发送消息 todo
   // function sendMessage() {
@@ -251,6 +250,7 @@ export default function App() {
         {!userInfo && (
           <Button
             onPress={onOpen}
+            ref={buttonRef}
             className="translate-y-10 w-1/6 rounded-full bt-color "
           >
             微信登录

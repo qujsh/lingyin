@@ -1,7 +1,6 @@
 import axios from "axios";
 import { apiResult } from "@/app/_models/result";
 
-//todo
 const request = axios.create({
   //   baseURL: lingyinConfig.baseURL,
   timeout: 10000,
