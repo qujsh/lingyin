@@ -1,12 +1,6 @@
 // config.js 做统一环境变量处理
-const CDN_URL = "https://lingyin.tos-cn-shanghai.volces.com";
-const DEV_URL = "";
-let assetPrefix = DEV_URL;
-let online = false;
-if (process.env.ELT_ENV === "package") {
-  assetPrefix = CDN_URL + "/public";
-  online = true;
-}
+// const CDN_URL = "https://lingyin.tos-cn-shanghai.volces.com";
+let assetPrefix = "";
 
 //还涉及到 ase的16位程度加密
 const SECRET_KEY = "www.nextvoice.cn";
@@ -21,7 +15,6 @@ const lingyinConfig = {
   domain: DOMAIN,
   key: SECRET_KEY,
   assetPrefix, //cdn 静态域名前缀
-  online,
   requestUrls: {
     ws: localDomain + "/ws", //ws连接
     wxwebUserInfo: localDomain + "/wxweb/userInfo", //请求用户信息

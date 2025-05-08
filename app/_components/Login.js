@@ -24,7 +24,6 @@ import { wxwebUserInfo } from "@/app/_models/user/userInfo";
 export default function App({ buttonRef }) {
   const {
     assetPrefix,
-    online,
     requestUrls,
     userInfo,
     setUserInfo,
@@ -45,7 +44,7 @@ export default function App({ buttonRef }) {
         // 服务器 WebSocket 地址
         new SockJS(requestUrls.ws + "?t=" + new Date().getTime()),
       debug: (str) => {
-        if (!online) {
+        if (process.env.NODE_ENV === "development") {
           console.log("debug", str);
         }
       },
@@ -247,7 +246,7 @@ export default function App({ buttonRef }) {
           />
         </div>
 
-        {!userInfo && (
+        {(!userInfo || userInfo.id <= 0) && (
           <Button
             onPress={onOpen}
             ref={buttonRef}
@@ -257,10 +256,10 @@ export default function App({ buttonRef }) {
           </Button>
         )}
 
-        {userInfo && !connected && (
+        {userInfo?.id > 0 && !connected && (
           <Button
             onPress={(e) => connectWs(e)}
-            {...(online ? { isDisabled: true } : {})}
+            {...(!window.electron ? { isDisabled: true } : {})}
             className="translate-y-10 w-1/6 rounded-full bt-color "
           >
             连接服务

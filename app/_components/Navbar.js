@@ -68,7 +68,7 @@ export default function App({ onLoginClick }) {
       </NavbarBrand>
 
       <NavbarContent as="div" justify="end" className="flex justify-end ">
-        {!userInfo && (
+        {(!userInfo || userInfo.id <= 0) && (
           <Chip
             color="default"
             size="sm"
@@ -80,7 +80,7 @@ export default function App({ onLoginClick }) {
           </Chip>
         )}
 
-        {userInfo && !connected && (
+        {userInfo?.id > 0 && !connected && (
           <Chip
             color="default"
             size="sm"
@@ -92,7 +92,7 @@ export default function App({ onLoginClick }) {
           </Chip>
         )}
 
-        {userInfo && connected && (
+        {userInfo?.id > 0 && connected && (
           <Chip
             color="success"
             size="sm"
@@ -117,14 +117,14 @@ export default function App({ onLoginClick }) {
                 userInfo?.headimg || "https://cdn.auth0.com/avatars/default.png"
               }
               onClick={() => {
-                if (!userInfo) {
+                if (!userInfo || userInfo.id <= 0) {
                   onLoginClick();
                 }
               }}
             />
           </DropdownTrigger>
 
-          {userInfo && (
+          {userInfo?.id > 0 && (
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem
                 key="profile"

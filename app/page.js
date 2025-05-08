@@ -5,11 +5,8 @@ import Navbar from "@/app/_components/Navbar";
 import Guide from "@/app/_components/Guide";
 import Login from "@/app/_components/Login";
 import Sidebar from "@/app/_components/Sidebar";
-import { useGlobalContext } from "@/app/_components/GlobalContext";
 
 export default function Home() {
-  const { assetPrefix, online, requestUrls, userInfo, setUserInfo } =
-    useGlobalContext(); // 获取全局的 assetPrefix
 
   const loginBtnRef = useRef();
 
