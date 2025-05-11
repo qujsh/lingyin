@@ -1,6 +1,6 @@
 {
   "appId": "cn.nextvoice",
-  "productName": "Lingyin",
+  "productName": "LingYin",
   "asar": true,
   "mac": {
     "icon": "assets/icon.icns",
