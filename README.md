@@ -25,10 +25,10 @@
 
 默认配置文件：config.mjs
 
-本地调试的后端地址：localDomain = "http://localhost:8080";（后端服务未开源，有需要可以私聊沟通）
-
-远程服务器请求地址：DOMAIN = "https://nextvoice.cn";
-
 ```bash
-npm run electron 
+#默认连接远程服务器，可试验PC端效果
+npm run cdn:electron  
+
+#本地启动后端服务时使用，后端项目暂未开源
+npm run electron  
 ```
