@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-permissions:
-  contents: write
 
 jobs:
   publish:
@@ -37,6 +35,6 @@ jobs:
       - name: Publish releases
         env:
           # This is used for uploading release assets to github
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           npm exec electron-builder -- --publish always --mac 
