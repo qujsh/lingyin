@@ -11,6 +11,10 @@ import {
   ModalBody,
   useDisclosure,
   useDraggable,
+  Card,
+  CardBody,
+  CardFooter,
+  Image as HeroImage,
 } from "@heroui/react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
@@ -30,6 +34,13 @@ export default function App({ buttonRef }) {
     connected,
     setConnected,
   } = useGlobalContext(); // 获取全局的 assetPrefix
+
+  const dmgUrl =
+    "https://github.com/qujsh/lingyin/releases/download/v" +
+    process.env.APP_VERSION +
+    "/lingyin-assistant-" +
+    process.env.APP_VERSION +
+    "-arm64.dmg";
 
   const [username, setUsername] = useState("");
   const [stompClient, setStompClient] = useState(null);
@@ -276,6 +287,70 @@ export default function App({ buttonRef }) {
           </Button>
         )}
       </div>
+
+      {process.env.ELT_ENV !== "package" && (
+        <div className="grid grid-cols-2 place-items-center translate-y-full">
+          <Card
+            isFooterBlurred
+            className="w-2/3 border-none bg-white/40"
+            radius="lg"
+          >
+            <HeroImage
+              alt="windows download"
+              className="mx-auto  mt-2 mb-8 w-16 h-32 object-contain"
+              height={180}
+              src={`${assetPrefix}/windows.svg`}
+              width={200}
+            />
+            <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+              <p className="text-small text-black/60">64位版本</p>
+              <Button
+                className="text-tiny text-white bg-black/20"
+                color="default"
+                radius="lg"
+                size="sm"
+                variant="flat"
+              >
+                点击下载
+              </Button>
+            </CardFooter>
+          </Card>
+
+          <Card
+            isFooterBlurred
+            className="w-2/3 border-none bg-white/40"
+            radius="lg"
+          >
+            <HeroImage
+              alt="apple download"
+              className="mx-auto mt-2 mb-8 w-16 h-32 object-contain"
+              height={180}
+              src={`${assetPrefix}/apple.svg`}
+              width={200}
+            />
+            <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+              <p className="text-small text-black/60">通用版本</p>
+              <Button
+                className="text-tiny text-white bg-black/20"
+                color="default"
+                radius="lg"
+                size="sm"
+                variant="flat"
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = dmgUrl;
+                  link.download = ""; // 留空即可使用 URL 的默认文件名
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+              >
+                点击下载
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+      )}
 
       <Modal
         ref={targetRef}
