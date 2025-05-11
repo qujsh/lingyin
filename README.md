@@ -1,7 +1,7 @@
 这是[`凌音助手`]在桌面端（electron）下的项目应用，当前版本需要配合微信服务号[`凌音助手`]使用。
 
 ### 功能示例一：
-![<img src="public/output.png" alt="项目截图" width="800"/>](public/output.png)
+![<img src="public/output.png" alt="项目截图" width="500"/>](public/output.png)
 
 在微信服务号[`凌音助手`]中发送普通输入或语音输入的文本后，可以在安装了[`凌音助手`]的PC的app上输出文本，
 它是个跨系统跨应用的文本转发工具。
