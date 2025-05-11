@@ -227,7 +227,9 @@ app.whenReady().then(() => {
     }
   });
 
-  autoUpdater.checkForUpdatesAndNotify();
+  if (app.isPackaged) {
+    autoUpdater.checkForUpdatesAndNotify();
+  }
 
   autoUpdater.on("update-available", () => {
     dialog
@@ -256,6 +258,17 @@ app.whenReady().then(() => {
           autoUpdater.quitAndInstall();
         }
       });
+  });
+
+  autoUpdater.on("update-not-available", () => {
+    console.log("暂无更新...");
+  });
+
+  autoUpdater.on("error", (error) => {
+    dialog.showErrorBox(
+      "更新错误",
+      error == null ? "unknown" : (error.stack || error).toString()
+    );
   });
 });
 

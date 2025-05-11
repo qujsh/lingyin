@@ -3,6 +3,7 @@
   "productName": "凌音助手",
   "asar": true,
   "mac": {
+    "artifactName": "lingyin-${version}-${arch}.${ext}",
     "icon": "assets/icon.icns",
     "target": [
       {
@@ -12,6 +13,7 @@
     ]
   },
   "win": {
+    "artifactName": "lingyin-${version}-${arch}.${ext}",
     "icon": "assets/icon.ico",
     "target": ["nsis"]
   },
