@@ -35,6 +35,13 @@ export default function App({ buttonRef }) {
     setConnected,
   } = useGlobalContext(); // 获取全局的 assetPrefix
 
+  const dmgUrl =
+    "https://github.com/qujsh/lingyin/releases/download/v" +
+    process.env.APP_VERSION +
+    "/lingyin-assistant-" +
+    process.env.APP_VERSION +
+    "-arm64.dmg";
+
   const [username, setUsername] = useState("");
   const [stompClient, setStompClient] = useState(null);
 
@@ -281,7 +288,7 @@ export default function App({ buttonRef }) {
         )}
       </div>
 
-      {window.electron && (
+      {process.env.ELT_ENV !== "package" && (
         <div className="grid grid-cols-2 place-items-center translate-y-full">
           <Card
             isFooterBlurred
@@ -329,6 +336,14 @@ export default function App({ buttonRef }) {
                 radius="lg"
                 size="sm"
                 variant="flat"
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = dmgUrl;
+                  link.download = ""; // 留空即可使用 URL 的默认文件名
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
               >
                 点击下载
               </Button>
