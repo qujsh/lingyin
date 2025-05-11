@@ -1,6 +1,6 @@
 {
   "name": "lingyin",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "author": "qujsh",
   "private": true,
   "main": "main.js",
@@ -23,6 +23,7 @@
     "autoprefixer": "^10.4.20",
     "axios": "^1.8.4",
     "crypto-js": "^4.2.0",
+    "electron-updater": "^6.6.2",
     "mac-scrollbar": "^0.13.8",
     "motion": "^12.4.10",
     "next": "15.2.0",
@@ -31,14 +32,13 @@
     "react-dom": "^19.0.0",
     "sockjs-client": "^1.6.1",
     "tailwindcss": "^3.4.17",
-    "uuid": "^11.1.0",
-    "electron-updater": "^6.6.2"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "concurrently": "^9.1.2",
     "electron": "^35.0.0",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "^26.0.12",
     "eslint": "^9",
     "eslint-config-next": "15.2.0",
     "wait-on": "^8.0.3"
