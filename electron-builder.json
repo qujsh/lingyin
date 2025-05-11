@@ -16,7 +16,9 @@
   },
   "win": {
     "icon": "assets/icon.ico",
-    "target": ["nsis"]
+    "target": [
+      "nsis"
+    ]
   },
   "nsis": {
     "oneClick": false,
@@ -44,7 +46,8 @@
     {
       "provider": "github",
       "owner": "qujsh",
-      "repo": "lingyin"
+      "repo": "lingyin",
+      "releaseType": "release"
     }
   ]
 }
