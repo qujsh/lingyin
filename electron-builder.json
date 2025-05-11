@@ -1,32 +1,25 @@
 {
   "appId": "cn.nextvoice",
-  "productName": "lingyin-assistant",
+  "productName": "%E5%87%8C%E9%9F%B3%E5%8A%A9%E6%89%8B",
   "asar": true,
   "mac": {
     "icon": "assets/icon.icns",
     "target": [
       {
         "target": "default",
-        "arch": [
-          "x64",
-          "arm64"
-        ]
+        "arch": ["x64", "arm64"]
       }
     ]
   },
   "win": {
     "icon": "assets/icon.ico",
-    "target": [
-      "nsis"
-    ]
+    "target": ["nsis"]
   },
   "nsis": {
     "oneClick": false,
     "allowToChangeInstallationDirectory": true
   },
-  "extraResources": [
-    "./assets/**"
-  ],
+  "extraResources": ["./assets/**"],
   "dmg": {
     "contents": [
       {
