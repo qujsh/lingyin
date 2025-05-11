@@ -1,6 +1,6 @@
 {
   "appId": "cn.nextvoice",
-  "productName": "凌音助手",
+  "productName": "lingyin-assistant",
   "asar": true,
   "mac": {
     "icon": "assets/icon.icns",
