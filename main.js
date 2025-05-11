@@ -52,16 +52,6 @@ function createWindow() {
   // 加载 Next.js 应用
   win.loadURL(webUrl);
 
-  //开发环境
-  // let indexPath = path.join(__dirname, "out", "index.html");
-  // if (app.isPackaged) {
-  //   //生产环境，是否有打包
-  //   indexPath = path.join(process.resourcesPath, "out", "index.html");
-  // }
-
-  // // 加载本地的 Next.js 静态文件
-  // win.loadFile(indexPath); // 使用 file:// 协议来加载静态文件
-
   // 打开开发工具（仅在开发环境中）
   if (!app.isPackaged) {
     win.webContents.openDevTools();
@@ -237,14 +227,6 @@ app.whenReady().then(() => {
     }
   });
 
-  //todo 自动更新，待测试
-  // "publish": [
-  //   {
-  //     "provider": "github",
-  //     "owner": "qujsh",
-  //     "repo": "lingyin"
-  //   }
-  // ]
   autoUpdater.checkForUpdatesAndNotify();
 
   autoUpdater.on("update-available", () => {
