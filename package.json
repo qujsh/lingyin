@@ -13,7 +13,7 @@
     "cdn:start": "export ELT_ENV=package && next start",
     "cdn:electron": "export ELT_ENV=package && electron .",
     "electron": "concurrently \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:builder": "electron-builder --mac"
+    "electron:builder": "electron-builder"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
