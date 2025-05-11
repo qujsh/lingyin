@@ -58,7 +58,7 @@ export default function App({ onLoginClick }) {
     >
       <NavbarBrand className="flex items-center space-x-2">
         <Image
-          src={`${assetPrefix}/favicon.ico`}
+          src={`${assetPrefix}/logo.png`}
           alt="Logo"
           width={36}
           height={36}

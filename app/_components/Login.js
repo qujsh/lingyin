@@ -16,7 +16,7 @@ import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { useGlobalContext } from "@/app/_components/GlobalContext";
 import { v4 as uuidv4 } from "uuid";
-import { encrypt } from "@/app/_lib/aesUtil";
+import { encrypt, decrypt } from "@/app/_lib/aesUtil";
 import request from "@/app/_lib/request";
 import { wxwebUserInfo } from "@/app/_models/user/userInfo";
 
@@ -184,6 +184,7 @@ export default function App({ buttonRef }) {
       setState(state);
       localStorage.setItem("wx_login_state", encrypt(state));
     } else {
+      setState(decrypt(wxLoginState));
       //获取远程用户数据
       request
         .get(requestUrls.wxwebUserInfo, {

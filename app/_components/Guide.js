@@ -27,9 +27,8 @@ export default function App() {
                       <span>
                         举例：
                         <span className="bg-[rgba(255,248,151)] ">
-                          在微信的“凌音助手”服务号做语音输入
+                          在微信的“凌音助手”服务号做语音输入，可以在电脑的飞书、word、钉钉或其他应用上将文本输出。
                         </span>
-                        ，可以在电脑的飞书、word、钉钉或其他应用上将文本输出。
                       </span>
                     </div>
                   </div>
