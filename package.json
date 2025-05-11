@@ -1,6 +1,6 @@
 {
   "name": "lingyin",
-  "version": "0.1.21",
+  "version": "0.1.23",
   "author": "qujsh",
   "private": true,
   "main": "main.js",
@@ -11,11 +11,9 @@
     "lint": "next lint",
     "cdn:build": "export ELT_ENV=package && next build",
     "cdn:start": "export ELT_ENV=package && next start",
+    "cdn:electron": "export ELT_ENV=package && electron .",
     "electron": "concurrently \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:on": "export ELT_ENV=package && concurrently \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:win": "set ELT_ENV=package&& concurrently \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron-builder": "electron-builder --mac",
-    "electron:builder": "export ELT_ENV=package && next build && electron-builder --mac"
+    "electron:builder": "electron-builder --mac"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

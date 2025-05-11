@@ -29,13 +29,6 @@ function createWindow() {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-  const iconPath = getAssetPath("icon.icns");
-  if (!fs.existsSync(iconPath)) {
-    console.error(`Icon file does not exist at path: ${iconPath}`);
-  } else {
-    console.log(`Icon file exists: ${iconPath}`);
-  }
-
   // 创建浏览器窗口
   win = new BrowserWindow({
     width: width, // 设置窗口宽度为屏幕宽度
@@ -52,7 +45,7 @@ function createWindow() {
 
   // 这是 Next.js 开发服务器的默认端口
   let webUrl = "http://localhost:3000";
-  if (app.isPackaged && process.env.ELT_ENV === "package") {
+  if (app.isPackaged) {
     webUrl = "https://nextvoice.cn";
   }
 

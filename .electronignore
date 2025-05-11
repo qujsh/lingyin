@@ -1,0 +1,10 @@
+.idea/
+.next/
+app/
+dist/
+node_modules/
+public/
+*.log
+*.map
+tests/
+.git/
