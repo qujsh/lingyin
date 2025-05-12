@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ macos-latest ]
+        os: [macos-latest, windows-latest]
 
     steps:
       - name: Checkout git repo
@@ -38,4 +38,9 @@ jobs:
           # This is used for uploading release assets to github
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          npm exec electron-builder -- --publish always --mac --win
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            npm exec electron-builder -- --mac --publish always
+          elif [[ "$RUNNER_OS" == "Windows" ]]; then
+            npm exec electron-builder -- --win --x64 --publish always
+          fi
+        shell: bash
