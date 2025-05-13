@@ -23,6 +23,7 @@
     "autoprefixer": "^10.4.20",
     "axios": "^1.8.4",
     "crypto-js": "^4.2.0",
+    "electron-log": "^5.4.0",
     "electron-updater": "^6.6.2",
     "mac-scrollbar": "^0.13.8",
     "motion": "^12.4.10",

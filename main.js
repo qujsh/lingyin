@@ -12,6 +12,7 @@ const { exec } = require("child_process");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
 const fs = require("fs");
+const log = require('electron-log');
 
 let win;
 let dialogWindow;
@@ -63,8 +64,6 @@ function simulateInit(Event) {
   const check = isBoolean ? Event : false;
 
   return new Promise((resolve) => {
-    console.log("do simulate-init");
-
     // **1. 模拟 Ctrl+C，判定是否有操作权限 **
     if (process.platform === "darwin") {
       // **macOS（Command + C）**
@@ -140,7 +139,7 @@ function simulateInit(Event) {
         'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
           "$wshell.SendKeys('^c'); ", // Ctrl + C
         (error) => {
-          if (error) console.error("Error executing PowerShell:", error);
+          if (error) log.error("Error executing PowerShell:", error);
 
           resolve(false);
         }
@@ -201,7 +200,7 @@ ipcMain.on("simulate-paste", (event, text) => {
         //在这个地方可以捕获到
         // Error executing osascript: Error: Command failed: osascript -e "tell application \"System Events\"" -e "keystroke \"v\" using command down" -e "delay 0.05" -e "key code 36" -e "end tell"
         //[1] 33:65: execution error: “System Events”遇到一个错误：“osascript”不允许发送按键。 (1002)
-        if (error) console.error("Error executing osascript:", error);
+        if (error) log.error("Error executing osascript:", error);
       }
     );
   } else if (process.platform === "win32") {
@@ -212,7 +211,7 @@ ipcMain.on("simulate-paste", (event, text) => {
         "Start-Sleep -Milliseconds 100; " + // 等待 0.1 秒
         "$wshell.SendKeys('{ENTER}')\"", // 回车
       (error) => {
-        if (error) console.error("Error executing PowerShell:", error);
+        if (error) log.error("Error executing PowerShell:", error);
       }
     );
   }
@@ -261,7 +260,8 @@ app.whenReady().then(() => {
   });
 
   autoUpdater.on("update-not-available", () => {
-    console.log("暂无更新...");
+      //todo
+    log.log("暂无更新...");
   });
 
   autoUpdater.on("error", (error) => {
