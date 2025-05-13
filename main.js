@@ -6,12 +6,10 @@ const {
   clipboard,
   dialog,
   shell,
-  nativeImage,
 } = require("electron");
 const { exec } = require("child_process");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
-const fs = require("fs");
 const log = require('electron-log');
 
 let win;
