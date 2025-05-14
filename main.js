@@ -71,6 +71,9 @@ function simulateInit(Event) {
           '-e "end tell"',
         (error) => {
           if (error) {
+            //todo
+            log.error("darwin Error executing osascript:", error);
+
             if (dialogWindow) {
               return;
             }
@@ -137,9 +140,12 @@ function simulateInit(Event) {
         'powershell -command "$wshell = New-Object -ComObject wscript.shell; ' +
           "$wshell.SendKeys('^c'); ", // Ctrl + C
         (error) => {
-          if (error) log.error("Error executing PowerShell:", error);
+          if (error) {
+            log.error("win Error executing PowerShell:", error);
+            resolve(false);
+          }
 
-          resolve(false);
+          resolve(true);
         }
       );
     }
