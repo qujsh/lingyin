@@ -5,9 +5,10 @@ let assetPrefix = "";
 //还涉及到 ase的16位程度加密
 const SECRET_KEY = "www.nextvoice.cn";
 
-const DOMAIN = "https://nextvoice.cn";
+let DOMAIN = "http://localhost:3000";
 let localDomain = "http://localhost:8080";
 if (process.env.ELT_ENV === "package") {
+  DOMAIN = "https://nextvoice.cn";
   localDomain = DOMAIN + "/api";
 }
 

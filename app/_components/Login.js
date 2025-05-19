@@ -11,10 +11,8 @@ import {
   ModalBody,
   useDisclosure,
   useDraggable,
-  Card,
-  CardBody,
-  CardFooter,
   Image as HeroImage,
+  Link,
 } from "@heroui/react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
@@ -35,12 +33,26 @@ export default function App({ buttonRef }) {
     setConnected,
   } = useGlobalContext(); // 获取全局的 assetPrefix
 
-  const dmgUrl =
+  const arm64dmgUrl =
     "https://github.com/qujsh/lingyin/releases/download/v" +
     process.env.APP_VERSION +
-    "/lingyin-assistant-" +
+    "/lingyin-" +
     process.env.APP_VERSION +
     "-arm64.dmg";
+
+  const x64dmgUrl =
+    "https://github.com/qujsh/lingyin/releases/download/v" +
+    process.env.APP_VERSION +
+    "/lingyin-" +
+    process.env.APP_VERSION +
+    "-x64.dmg";
+
+  const x64exeUrl =
+    "https://github.com/qujsh/lingyin/releases/download/v" +
+    process.env.APP_VERSION +
+    "/lingyin-" +
+    process.env.APP_VERSION +
+    "-x64.exe";
 
   const [username, setUsername] = useState("");
   const [stompClient, setStompClient] = useState(null);
@@ -139,10 +151,15 @@ export default function App({ buttonRef }) {
         //true 关闭定时，false 断开连接，undefined 啥也不干
         if (res) {
           clearInterval(interval);
+
+          //添加成功后主动关闭弹窗
+          if (window.electron) {
+            window.electron.simulateClose();
+          }
         } else if (res === false) {
           disconnectWs(true);
         }
-      }, 3000); // 每 30 秒调用一次
+      }, 3000); // 每 3 秒调用一次
       return () => clearInterval(interval);
     } else {
       console.error("electron object is not available");
@@ -289,66 +306,58 @@ export default function App({ buttonRef }) {
       </div>
 
       {process.env.ELT_ENV !== "package" && (
-        <div className="grid grid-cols-2 place-items-center translate-y-full">
-          <Card
-            isFooterBlurred
-            className="w-2/3 border-none bg-white/40"
-            radius="lg"
-          >
-            <HeroImage
-              alt="windows download"
-              className="mx-auto  mt-2 mb-8 w-16 h-32 object-contain"
-              height={180}
-              src={`${assetPrefix}/windows.svg`}
-              width={200}
-            />
-            <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-              <p className="text-small text-black/60">64位版本</p>
-              <Button
-                className="text-tiny text-white bg-black/20"
-                color="default"
-                radius="lg"
-                size="sm"
-                variant="flat"
-              >
-                点击下载
-              </Button>
-            </CardFooter>
-          </Card>
+        <div className="flex flex-col space-y-2 translate-y-full mx-4">
+          <div>
+            <p>Apple Silicon下载地址：</p>
+            <Link
+              href={arm64dmgUrl}
+              download
+              underline="always"
+              className="text-sm"
+            >
+              {arm64dmgUrl}
+            </Link>
+          </div>
+          <div>
+            <p>Intel Mac下载地址：</p>
 
-          <Card
-            isFooterBlurred
-            className="w-2/3 border-none bg-white/40"
-            radius="lg"
-          >
-            <HeroImage
-              alt="apple download"
-              className="mx-auto mt-2 mb-8 w-16 h-32 object-contain"
-              height={180}
-              src={`${assetPrefix}/apple.svg`}
-              width={200}
-            />
-            <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-              <p className="text-small text-black/60">通用版本</p>
-              <Button
-                className="text-tiny text-white bg-black/20"
-                color="default"
-                radius="lg"
-                size="sm"
-                variant="flat"
-                onClick={() => {
-                  const link = document.createElement("a");
-                  link.href = dmgUrl;
-                  link.download = ""; // 留空即可使用 URL 的默认文件名
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                }}
-              >
-                点击下载
-              </Button>
-            </CardFooter>
-          </Card>
+            <Link
+              href={x64dmgUrl}
+              download
+              underline="always"
+              className="text-sm"
+            >
+              {x64dmgUrl}
+            </Link>
+          </div>
+          <div>
+            <p>Windows x64下载地址：</p>
+
+            <Link
+              href={x64exeUrl}
+              download
+              underline="always"
+              className="text-sm"
+            >
+              {x64exeUrl}
+            </Link>
+            <p className="text-xs leading-normal">
+              {/* svg来源： https://fontawesome.com/start */}
+              <span className="inline-flex mr-1">
+                <svg
+                  className="inline align-middle relative top-0.5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  width="12"
+                  height="12"
+                  fill="currentColor"
+                >
+                  <path d="M480 256A224 224 0 1 0 32 256a224 224 0 1 0 448 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm168.7-86.2c6.5-24.6 28.7-41.8 54.2-41.8l57.1 0c35.5 0 64 29 64 64.3c0 24-13.4 46.2-34.9 57.2L272 268.3l0 19.7c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-29.5c0-6 3.4-11.5 8.7-14.3l45.8-23.4c10.7-5.4 17.5-16.6 17.5-28.7c0-17.8-14.4-32.3-32-32.3l-57.1 0c-10.9 0-20.5 7.4-23.2 17.9l-.2 .7c-2.2 8.5-11 13.7-19.5 11.4s-13.7-11-11.4-19.5l.2-.7zM232 352a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z" />
+                </svg>
+              </span>
+              windows版本未添加代码签名证书（49美元/月），在安装时弹出的SmartScreen阻止弹窗上点击“更多信息-仍要运行”后正常运行
+            </p>
+          </div>
         </div>
       )}
 

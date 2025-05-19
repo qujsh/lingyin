@@ -40,7 +40,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           if [[ "$RUNNER_OS" == "macOS" ]]; then
-            npm exec electron-builder -- --mac --universal --publish always
+            npm exec electron-builder -- --mac --publish always
           elif [[ "$RUNNER_OS" == "Windows" ]]; then
             npm exec electron-builder -- --win --x64 --publish always
           fi

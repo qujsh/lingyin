@@ -10,13 +10,15 @@ const {
 const { exec } = require("child_process");
 const path = require("path");
 const { autoUpdater } = require("electron-updater");
-const log = require('electron-log');
+const log = require("electron-log");
 
 let win;
 let dialogWindow;
 let getAssetPath;
 
-function createWindow() {
+async function createWindow() {
+  const { default: lingyinConfig } = await import("./config.mjs");
+
   // 获取主屏幕的工作区域大小
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
@@ -42,14 +44,8 @@ function createWindow() {
     },
   });
 
-  // 这是 Next.js 开发服务器的默认端口
-  let webUrl = "http://localhost:3000";
-  if (app.isPackaged) {
-    webUrl = "https://nextvoice.cn";
-  }
-
   // 加载 Next.js 应用
-  win.loadURL(webUrl);
+  await win.loadURL(lingyinConfig.domain);
 
   // 打开开发工具（仅在开发环境中）
   if (!app.isPackaged) {
@@ -263,10 +259,10 @@ app.whenReady().then(() => {
       });
   });
 
-  autoUpdater.on("update-not-available", () => {
-      //todo
-    log.log("暂无更新...");
-  });
+  //todo log test, can remove
+  // autoUpdater.on("update-not-available", () => {
+  //   log.log("暂无更新...");
+  // });
 
   autoUpdater.on("error", (error) => {
     dialog.showErrorBox(
