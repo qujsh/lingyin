@@ -21,6 +21,7 @@ import { v4 as uuidv4 } from "uuid";
 import { encrypt, decrypt } from "@/app/_lib/aesUtil";
 import request from "@/app/_lib/request";
 import { wxwebUserInfo } from "@/app/_models/user/userInfo";
+import { isElectron } from "@/app/_lib/env";
 
 /* svg 来源： https://undraw.co/search/computer */
 export default function App({ buttonRef }) {
@@ -305,98 +306,99 @@ export default function App({ buttonRef }) {
         )}
       </div>
 
-      {process.env.ELT_ENV !== "package" && (
-          <div className="flex flex-col space-y-2 translate-y-48 mx-4">
-            <div className="text-sm">
-              <span>源代码地址(欢迎点赞)：</span>
-              <Link
-                  href="https://github.com/qujsh/lingyin"
-                  download
-                  underline="always"
-                  className="text-sm"
-              >
-                https://github.com/qujsh/lingyin
-              </Link>
-            </div>
-            <div>
-              <p>Apple Silicon下载地址：</p>
-              <Link
-                  href={arm64dmgUrl}
-                  download
-                  underline="always"
-                  className="text-sm"
-              >
-                {arm64dmgUrl}
-              </Link>
-            </div>
-            <div>
-              <p>Intel Mac下载地址：</p>
-
-              <Link
-                  href={x64dmgUrl}
-                  download
-                  underline="always"
-                  className="text-sm"
-              >
-                {x64dmgUrl}
-              </Link>
-            </div>
-            <div>
-              <p>Windows x64下载地址：</p>
-
-              <Link
-                  href={x64exeUrl}
-                  download
-                  underline="always"
-                  className="text-sm"
-              >
-                {x64exeUrl}
-              </Link>
-              <p className="text-xs leading-normal">
-                {/* svg来源： https://fontawesome.com/start */}
-                <span className="inline-flex mr-1 w-5">
-                {/*<svg*/}
-                  {/*  className="inline align-middle relative top-0.5"*/}
-                  {/*  xmlns="http://www.w3.org/2000/svg"*/}
-                  {/*  viewBox="0 0 512 512"*/}
-                  {/*  width="12"*/}
-                  {/*  height="12"*/}
-                  {/*  fill="currentColor"*/}
-                  {/*>*/}
-                  {/*  <path d="M480 256A224 224 0 1 0 32 256a224 224 0 1 0 448 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm168.7-86.2c6.5-24.6 28.7-41.8 54.2-41.8l57.1 0c35.5 0 64 29 64 64.3c0 24-13.4 46.2-34.9 57.2L272 268.3l0 19.7c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-29.5c0-6 3.4-11.5 8.7-14.3l45.8-23.4c10.7-5.4 17.5-16.6 17.5-28.7c0-17.8-14.4-32.3-32-32.3l-57.1 0c-10.9 0-20.5 7.4-23.2 17.9l-.2 .7c-2.2 8.5-11 13.7-19.5 11.4s-13.7-11-11.4-19.5l.2-.7zM232 352a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z" />*/}
-                  {/*</svg>*/}
-
-                  <Image
-                      src={`${assetPrefix}/exclamation-circle.svg`}
-                      alt="Icon"
-                      width={12}
-                      height={12}
-                      style={{
-                        width: "100%",
-                        height: "auto",
-                        display: 'inline',
-                        verticalAlign: 'middle',
-                        position: 'relative',
-                        top: '5px'
-                      }}
-                  />
-              </span>
-                windows版本未添加代码签名证书（49美元/月），在安装时弹出的SmartScreen阻止弹窗上点击“更多信息-仍要运行”后正常运行
-              </p>
-            </div>
+      {/* 非打包环境，展示下载文案 */}
+      {!isElectron() && (
+        <div className="flex flex-col space-y-2 translate-y-48 mx-4">
+          <div className="text-sm">
+            <span>源代码地址(欢迎点赞)：</span>
+            <Link
+              href="https://github.com/qujsh/lingyin"
+              download
+              underline="always"
+              className="text-sm"
+            >
+              https://github.com/qujsh/lingyin
+            </Link>
           </div>
+          <div>
+            <p>Apple Silicon下载地址：</p>
+            <Link
+              href={arm64dmgUrl}
+              download
+              underline="always"
+              className="text-sm"
+            >
+              {arm64dmgUrl}
+            </Link>
+          </div>
+          <div>
+            <p>Intel Mac下载地址：</p>
+
+            <Link
+              href={x64dmgUrl}
+              download
+              underline="always"
+              className="text-sm"
+            >
+              {x64dmgUrl}
+            </Link>
+          </div>
+          <div>
+            <p>Windows x64下载地址：</p>
+
+            <Link
+              href={x64exeUrl}
+              download
+              underline="always"
+              className="text-sm"
+            >
+              {x64exeUrl}
+            </Link>
+            <p className="text-xs leading-normal">
+              {/* svg来源： https://fontawesome.com/start */}
+              <span className="inline-flex mr-1 w-5">
+                {/*<svg*/}
+                {/*  className="inline align-middle relative top-0.5"*/}
+                {/*  xmlns="http://www.w3.org/2000/svg"*/}
+                {/*  viewBox="0 0 512 512"*/}
+                {/*  width="12"*/}
+                {/*  height="12"*/}
+                {/*  fill="currentColor"*/}
+                {/*>*/}
+                {/*  <path d="M480 256A224 224 0 1 0 32 256a224 224 0 1 0 448 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm168.7-86.2c6.5-24.6 28.7-41.8 54.2-41.8l57.1 0c35.5 0 64 29 64 64.3c0 24-13.4 46.2-34.9 57.2L272 268.3l0 19.7c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-29.5c0-6 3.4-11.5 8.7-14.3l45.8-23.4c10.7-5.4 17.5-16.6 17.5-28.7c0-17.8-14.4-32.3-32-32.3l-57.1 0c-10.9 0-20.5 7.4-23.2 17.9l-.2 .7c-2.2 8.5-11 13.7-19.5 11.4s-13.7-11-11.4-19.5l.2-.7zM232 352a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z" />*/}
+                {/*</svg>*/}
+
+                <Image
+                  src={`${assetPrefix}/exclamation-circle.svg`}
+                  alt="Icon"
+                  width={12}
+                  height={12}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "inline",
+                    verticalAlign: "middle",
+                    position: "relative",
+                    top: "5px",
+                  }}
+                />
+              </span>
+              windows版本未添加代码签名证书（49美元/月），在安装时弹出的SmartScreen阻止弹窗上点击“更多信息-仍要运行”后正常运行
+            </p>
+          </div>
+        </div>
       )}
 
       <Modal
-          ref={targetRef}
-          placement={modalPlacement}
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
+        ref={targetRef}
+        placement={modalPlacement}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
       >
         <ModalContent>
           {(onClose) => (
-              <>
-                <ModalHeader {...moveProps} className="flex flex-col gap-1">
+            <>
+              <ModalHeader {...moveProps} className="flex flex-col gap-1">
                 &nbsp;
               </ModalHeader>
               <ModalBody className="flex justify-center items-center h-full">
