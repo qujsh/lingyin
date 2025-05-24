@@ -2,7 +2,6 @@ const { notarize } = require("@electron/notarize");
 const { build } = require("../package.json");
 
 exports.default = async function notarizeMacos(context) {
-
   console.log("notarize.js notarizeMacos started running!");
 
   const { electronPlatformName, appOutDir } = context;
@@ -29,13 +28,29 @@ exports.default = async function notarizeMacos(context) {
   }
 
   const appName = context.packager.appInfo.productFilename;
+  const appPath = `${appOutDir}/${appName}.app`;
 
-  await notarize({
-    tool: "notarytool",
-    appBundleId: build.appId,
-    appPath: `${appOutDir}/${appName}.app`,
-    appleId: process.env.APPLE_ID,
-    appleIdPassword: process.env.APPLE_ID_PASS,
-    teamId: process.env.APPLE_TEAM_ID,
-  });
+  try {
+    console.log(`[Notarizing] Submitting: ${appPath}`);
+    const result = await notarize({
+      tool: "notarytool",
+      appBundleId: build.appId,
+      appPath,
+      appleId: process.env.APPLE_ID,
+      appleIdPassword: process.env.APPLE_ID_PASS,
+      teamId: process.env.APPLE_TEAM_ID,
+      wait: true, // 等待完成
+    });
+
+    console.log("[Notarization] Success");
+    if (result && result.uuid) {
+      console.log(`[Notarization] Submission ID: ${result.uuid}`);
+    }
+  } catch (error) {
+    console.error("[Notarization] Failed:", error.message || error);
+    if (error.result && error.result.uuid) {
+      console.error(`[Notarization] Submission ID: ${error.result.uuid}`);
+    }
+    throw error;
+  }
 };
