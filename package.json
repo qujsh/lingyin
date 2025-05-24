@@ -1,6 +1,6 @@
 {
   "name": "lingyin",
-  "version": "0.1.35",
+  "version": "0.1.36",
   "author": "qujsh",
   "private": true,
   "main": "main.js",
@@ -36,6 +36,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@electron/notarize": "^3.0.1",
     "@eslint/eslintrc": "^3",
     "concurrently": "^9.1.2",
     "electron": "^35.0.0",

@@ -3,17 +3,21 @@
   "productName": "凌音助手",
   "asar": true,
   "mac": {
+    "sign": "assets/notarize.js",
+    "notarize": false,
     "artifactName": "lingyin-${version}-${arch}.${ext}",
     "icon": "assets/icon.icns",
     "target": [
       {
         "target": "default",
-        "arch": [
-          "arm64",
-          "x64"
-        ]
+        "arch": ["arm64", "x64"]
       }
-    ]
+    ],
+    "type": "distribution",
+    "hardenedRuntime": true,
+    "entitlements": "assets/entitlements.mac.plist",
+    "entitlementsInherit": "assets/entitlements.mac.plist",
+    "gatekeeperAssess": false
   },
   "win": {
     "artifactName": "lingyin-${version}-${arch}.${ext}",
