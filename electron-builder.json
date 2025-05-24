@@ -2,9 +2,8 @@
   "appId": "cn.nextvoice",
   "productName": "凌音助手",
   "asar": true,
+  "afterSign": "assets/notarize.js",
   "mac": {
-    "sign": "assets/notarize.js",
-    "notarize": false,
     "artifactName": "lingyin-${version}-${arch}.${ext}",
     "icon": "assets/icon.icns",
     "target": [
