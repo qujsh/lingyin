@@ -4,7 +4,7 @@
   "asar": true,
   "mac": {
     "sign": "assets/notarize.js",
-    "notarize": false,
+    "notarize": true,
     "artifactName": "lingyin-${version}-${arch}.${ext}",
     "icon": "assets/icon.icns",
     "target": [

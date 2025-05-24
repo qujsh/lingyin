@@ -20,9 +20,9 @@
 
 ## 下载地址：
 
-- [Apple Silicon](https://github.com/qujsh/lingyin/releases/download/v0.1.35/lingyin-0.1.35-arm64.dmg) - 可在 Apple Silicon上运行
-- [Intel Mac](https://github.com/qujsh/lingyin/releases/download/v0.1.35/lingyin-0.1.35-x64.dmg) - 可在 Intel Mac上运行
-- [Windows x64](https://github.com/qujsh/lingyin/releases/download/v0.1.35/lingyin-0.1.35-x64.exe) - 可在 windows x64版本上运行
+- [Apple Silicon](https://github.com/qujsh/lingyin/releases/download/v0.1.37/lingyin-0.1.37-arm64.dmg) - 可在 Apple Silicon上运行
+- [Intel Mac](https://github.com/qujsh/lingyin/releases/download/v0.1.37/lingyin-0.1.37-x64.dmg) - 可在 Intel Mac上运行
+- [Windows x64](https://github.com/qujsh/lingyin/releases/download/v0.1.37/lingyin-0.1.37-x64.exe) - 可在 windows x64版本上运行
 - mac版已添加签名验证（688元/年），windows版本未添加代码签名证书（49美元/月 太贵），所以windows要运行的话，在安装时弹出的SmartScreen阻止弹窗上点击“更多信息-仍要运行”后可以正常运行。
 
 ## 本地启动
