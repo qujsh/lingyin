@@ -1,7 +1,11 @@
 const { notarize } = require("@electron/notarize");
-const { build } = require("../package.json");
+const { build } = require("./package.json");
 
-exports.default = async function notarizeMacos(context) {
+console.log("notarize.js has been loaded");
+
+exports.default = async function notarizing(context) {
+  console.log("Starting notarization test");
+
   const { electronPlatformName, appOutDir } = context;
   if (electronPlatformName !== "darwin") {
     return;
@@ -28,6 +32,8 @@ exports.default = async function notarizeMacos(context) {
   const appName = context.packager.appInfo.productFilename;
   const appPath = `${appOutDir}/${appName}.app`;
 
+  console.log(`Notarizing starting `);
+
   try {
     console.log(`[Notarizing] Submitting: ${appPath}`);
     const result = await notarize({
@@ -37,7 +43,6 @@ exports.default = async function notarizeMacos(context) {
       appleId: process.env.APPLE_ID,
       appleIdPassword: process.env.APPLE_ID_PASS,
       teamId: process.env.APPLE_TEAM_ID,
-      wait: true, // 等待完成
     });
 
     console.log("[Notarization] Success");

@@ -2,14 +2,17 @@
   "appId": "cn.nextvoice",
   "productName": "凌音助手",
   "asar": true,
-  "afterSign": "assets/notarize.js",
+  "afterSign": "./notarize.js",
   "mac": {
     "artifactName": "lingyin-${version}-${arch}.${ext}",
     "icon": "assets/icon.icns",
     "target": [
       {
         "target": "default",
-        "arch": ["arm64", "x64"]
+        "arch": [
+          "arm64",
+          "x64"
+        ]
       }
     ],
     "type": "distribution",
@@ -21,13 +24,17 @@
   "win": {
     "artifactName": "lingyin-${version}-${arch}.${ext}",
     "icon": "assets/icon.ico",
-    "target": ["nsis"]
+    "target": [
+      "nsis"
+    ]
   },
   "nsis": {
     "oneClick": false,
     "allowToChangeInstallationDirectory": true
   },
-  "extraResources": ["./assets/**"],
+  "extraResources": [
+    "./assets/**"
+  ],
   "dmg": {
     "contents": [
       {
