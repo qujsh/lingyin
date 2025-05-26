@@ -16,9 +16,7 @@ let win;
 let dialogWindow;
 let getAssetPath;
 
-async function createWindow() {
-  const { default: lingyinConfig } = await import("./config.mjs");
-
+function createWindow() {
   // 获取主屏幕的工作区域大小
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
@@ -45,7 +43,14 @@ async function createWindow() {
   });
 
   // 加载 Next.js 应用
-  await win.loadURL(lingyinConfig.domain);
+  let webUrl = "http://localhost:3000";
+  // webUrl = "https://nextvoice.cn";
+
+  // builder后为true，
+  if (app.isPackaged) {
+    webUrl = "https://nextvoice.cn";
+  }
+  win.loadURL(webUrl);
 
   // 打开开发工具（仅在开发环境中）
   if (!app.isPackaged) {

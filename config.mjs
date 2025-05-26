@@ -13,7 +13,7 @@ if (process.env.ELT_ENV === "package") {
 }
 
 const lingyinConfig = {
-  domain: DOMAIN,
+  domain: DOMAIN, //不要在打包后的main.js中使用
   key: SECRET_KEY,
   assetPrefix, //cdn 静态域名前缀
   requestUrls: {
