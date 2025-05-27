@@ -1,5 +1,5 @@
 const { notarize } = require("@electron/notarize");
-const { build } = require("./package.json");
+const { build } = require("../electron-builder.json");
 
 exports.default = async function notarizing(context) {
 
@@ -29,10 +29,7 @@ exports.default = async function notarizing(context) {
   const appName = context.packager.appInfo.productFilename;
   const appPath = `${appOutDir}/${appName}.app`;
 
-  console.log(`Notarizing starting `);
-
   try {
-    console.log(`[Notarizing] Submitting: ${appPath}`);
     const result = await notarize({
       tool: "notarytool",
       appBundleId: build.appId,
