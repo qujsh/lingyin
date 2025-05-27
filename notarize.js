@@ -1,10 +1,7 @@
 const { notarize } = require("@electron/notarize");
 const { build } = require("./package.json");
 
-console.log("notarize.js has been loaded");
-
 exports.default = async function notarizing(context) {
-  console.log("Starting notarization test");
 
   const { electronPlatformName, appOutDir } = context;
   if (electronPlatformName !== "darwin") {
