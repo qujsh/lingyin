@@ -8,6 +8,8 @@ exports.default = async function notarizing(context) {
     return;
   }
 
+  console.log(process.env);
+
   if (process.env.CI !== "true") {
     console.warn("Skipping notarizing step. Packaging is not running in CI");
     return;
